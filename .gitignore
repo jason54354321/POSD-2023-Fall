@@ -1,4 +1,19 @@
 bin/
-.cache/
+lib/
+
+# cmake
+Makefile
+
+CMakeFiles/
+_deps/
+
+CMakeCache.txt
+compile_commands.json
+cmake_install.cmake
+
+# ctest
+Testing/
+CTestTestfile.cmake
+
 .DS_Store
 
