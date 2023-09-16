@@ -1,11 +1,10 @@
-#include "hello.h"
 #include <iostream>
+#include "./hello.h"
 using namespace std;
 
 int main(void) {
 
-  Hello hello;
-  std::cout << hello.sayHello("world") << '\n';
+  std::cout << sayHello("world") << '\n';
 
   return 0;
 }
