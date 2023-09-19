@@ -1,3 +1,12 @@
+INCLUDE= test/ut_main.cpp \
+				test/ut_hello.h \
+				src/hello.h \
+				test/ut_triangle.h \
+				src/triangle.h \
+				src/shape.h \
+
+
+#windows specific setting
 ifeq ($(OS),Windows_NT)
 SHELL := powershell.exe
 .SHELLFLAGS := -NoProfile -Command
@@ -10,7 +19,7 @@ all: directories bin/ut_all bin/main
 bin/main: src/main.cpp src/hello.h
 	g++ -std=c++14 src/main.cpp -o bin/main
 
-bin/ut_all: test/ut_main.cpp test/ut_hello.h src/hello.h test/ut_triangle.h src/triangle.h
+bin/ut_all: $(INCLUDE)
 	g++ -std=c++14 test/ut_main.cpp -o bin/ut_all -lgtest -lpthread
 
 directories:
