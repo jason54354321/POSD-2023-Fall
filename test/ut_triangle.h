@@ -1,8 +1,8 @@
 #include "../src/triangle.h"
 #include <gtest/gtest.h>
 
-TEST(HelloTest, SayHello) {
-  Triangle triangle(1, 2, 3);
+TEST(TriangleSuite, PerimeterAdd) {
+  Triangle triangle(1.0, 2.0, 3.0);
 
-  ASSERT_EQ(triangle.perimeter(), 12);
+  ASSERT_EQ(triangle.perimeter(), 6);
 }

@@ -13,7 +13,6 @@ public:
   double perimeter() {
     return _e1 + _e2 + _e3;
   }
-  virtual ~Triangle();
 };
 
 #endif /* TRIANGLE_H */

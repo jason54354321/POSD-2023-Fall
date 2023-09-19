@@ -1,5 +1,6 @@
-#include <gtest/gtest.h>
 #include "ut_hello.h"
+#include "ut_triangle.h"
+#include <gtest/gtest.h>
 
 int main(int argc, char *argv[]) {
   testing::InitGoogleTest(&argc, argv);

@@ -10,7 +10,7 @@ all: directories bin/ut_all bin/main
 bin/main: src/main.cpp src/hello.h
 	g++ -std=c++14 src/main.cpp -o bin/main
 
-bin/ut_all: test/ut_main.cpp test/ut_hello.h src/hello.h
+bin/ut_all: test/ut_main.cpp test/ut_hello.h src/hello.h test/ut_triangle.h src/triangle.h
 	g++ -std=c++14 test/ut_main.cpp -o bin/ut_all -lgtest -lpthread
 
 directories:
