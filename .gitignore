@@ -2,3 +2,8 @@ bin/
 lib/
 _deps/
 .DS_Store
+.cache/
+
+build/*
+!build/CMakeLists.txt
+

@@ -1,3 +1,0 @@
-"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\run.dir/objects.a
-C:\PROGRA~1\LLVM-M~1\bin\llvm-ar.exe qc CMakeFiles\run.dir/objects.a @CMakeFiles\run.dir\objects1.rsp
-C:\PROGRA~1\LLVM-M~1\bin\C__~1.EXE -Wl,--whole-archive CMakeFiles\run.dir/objects.a -Wl,--no-whole-archive -o bin\run.exe -Wl,--out-implib,lib\librun.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\run.dir\linkLibs.rsp
