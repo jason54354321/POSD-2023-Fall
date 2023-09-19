@@ -6,3 +6,9 @@ TEST(TriangleSuite, PerimeterAdd) {
 
   ASSERT_EQ(triangle.perimeter(), 6);
 }
+
+TEST(TriangleSuite, PerimeterAdd_ClassAsShape) {
+  Shape *triangle = new Triangle(1.0, 2.0, 3.0);
+
+  ASSERT_EQ(triangle->perimeter(), 6);
+}
