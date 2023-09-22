@@ -1,3 +1,4 @@
+#include "ut_compund.h"
 #include "ut_hello.h"
 #include "ut_triangle.h"
 #include <gtest/gtest.h>

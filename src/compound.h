@@ -14,7 +14,13 @@ private:
   std::vector<Shape *> shapes;
 
 public:
-  Compound(){};
+  Compound(std::vector<Shape *> shapes) {
+    this->shapes = shapes;
+  };
+
+  std::vector<Shape *> getShapes() {
+    return shapes;
+  }
 
   void sort() {
     std::sort(shapes.begin(), shapes.end(), compareShape);
