@@ -18,9 +18,13 @@ public:
     this->shapes = shapes;
   };
 
+	// TODO: Delete
   std::vector<Shape *> getShapes() {
     return shapes;
   }
+
+	// TODO: double perimeter()
+
 
   void sort() {
     std::sort(shapes.begin(), shapes.end(), compareShape);
