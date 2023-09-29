@@ -2,6 +2,9 @@
 
 bin
 obj
+build/
+lib/
+.cache/
 
 #Mac Os
 .DS_Store
