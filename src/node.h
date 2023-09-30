@@ -7,9 +7,9 @@ using namespace std;
 
 class Node {
 public:
-  string name() const;
+  virtual string name() const = 0;
 
-  string path() const;
+  virtual string path() const = 0;
 
   void add(Node *node);
 
