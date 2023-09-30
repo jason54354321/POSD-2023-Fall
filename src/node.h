@@ -1,26 +1,25 @@
 #if !defined(NODE_H)
 #define NODE_H
 
-#include<string>
+#include <string>
 
 using namespace std;
 
 class Node {
 public:
-    string name() const;
-    
-    string path() const;
-    
-    void add(Node * node);
+  string name() const;
 
-    void remove(string path);
-    
-    Node * getChildByName(const char * name) const;
+  string path() const;
 
-    int numberOfFiles() const;
+  void add(Node *node);
 
-    Iterator * createIterator();
+  void remove(string path);
+
+  Node *getChildByName(const char *name) const;
+
+  int numberOfFiles() const;
+
+  /* Iterator * createIterator(); */
 };
-
 
 #endif // NODE_H
