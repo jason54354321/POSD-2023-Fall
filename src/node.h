@@ -1,3 +1,4 @@
+#include "iterator.h"
 #if !defined(NODE_H)
 #define NODE_H
 
@@ -18,6 +19,8 @@ public:
   Node *getChildByName(const char *name) const;
 
   int numberOfFiles() const;
+
+  virtual Iterator *createIterator() = 0;
 
   /* Iterator * createIterator(); */
 };

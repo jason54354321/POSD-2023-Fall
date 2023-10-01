@@ -1,3 +1,4 @@
+#include "iterator.h"
 #include "node.h"
 #include <regex>
 #include <string>
@@ -9,8 +10,10 @@
 using namespace std;
 
 class Folder : public Node {
+  friend class FolderIterator;
+
 private:
-  vector<Node> nodes;
+  vector<Node *> nodes;
   string _path;
 
 public:
@@ -30,6 +33,10 @@ public:
       return string_pieces[0];
     }
     return "Regex found no string";
+  }
+
+  Iterator *createIterator() override {
+    return new FolderIterator(this);
   }
 };
 

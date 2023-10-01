@@ -1,30 +1,35 @@
 #if !defined(ITERATOR_H)
 #define ITERATOR_H
 
-#pragma once 
+#include <list>
+#include <vector>
 
-#include<list>
+#pragma once
 
 class Node;
 class Folder;
 
 class Iterator {
 public:
-    ~Iterator();
-    void first();
-    Node * currentItem() const;
-    void next();
-    bool isDone() const;
+  ~Iterator();
+  void first();
+  Node *currentItem() const;
+  void next();
+  bool isDone() const;
 };
 
+// Is a stateful class
 class FolderIterator : public Iterator {
-public:
-    FolderIterator(Folder* composite);
-    void first();
-    Node * currentItem() const;
-    void next();
-    bool isDone() const;
-};
+private:
+  Folder *_folder;
+  std::vector<Node *>::iterator _it;
 
+public:
+  FolderIterator(Folder *folder);
+  void first();
+  Node *currentItem() const;
+  void next();
+  bool isDone() const;
+};
 
 #endif // ITERATOR_H

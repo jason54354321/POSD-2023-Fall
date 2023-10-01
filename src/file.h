@@ -1,3 +1,4 @@
+#include "iterator.h"
 #include "node.h"
 #include <iostream>
 #include <regex>
@@ -27,6 +28,10 @@ public:
       return string_pieces[0];
     }
     return "Regex found no string";
+  }
+
+  Iterator *createIterator() override {
+    return nullptr;
   }
 };
 
