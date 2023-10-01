@@ -4,7 +4,7 @@ INCLUDES= src/node.h \
 
 .PHONY: directories clean stat
 
-all: directories bin/ut_all
+all: clean directories bin/ut_all
 # all: directories bin/ut_all bin/main
 
 # bin/main: src/main.cpp
