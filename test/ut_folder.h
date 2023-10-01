@@ -1,8 +1,8 @@
+#include "../src/file.h"
 #include "../src/folder.h"
 #include <gtest/gtest.h>
 
 class FolderSuite : public ::testing::Test {
-
 protected:
   Folder *_folderDocument;
   Folder *_folderMusic;
