@@ -4,26 +4,26 @@
 
 class FolderSuite : public ::testing::Test {
 protected:
-  Folder *folderDocument;
-  Folder *folderMusic;
+  Folder *folderDocument_;
+  Folder *folderMusic_;
 
   void SetUp() override {
-    folderDocument = new Folder("documents/111");
-    folderMusic = new Folder("music/jazz");
+    folderDocument_ = new Folder("documents/111");
+    folderMusic_ = new Folder("music/jazz");
   }
 
   void TearDown() override {
-    delete folderDocument;
-    delete folderMusic;
+    delete folderDocument_;
+    delete folderMusic_;
   }
 };
 
 TEST_F(FolderSuite, TestFolderPath) {
-  ASSERT_EQ("documents/111", folderDocument->path());
-  ASSERT_EQ("music/jazz", folderMusic->path());
+  ASSERT_EQ("documents/111", folderDocument_->path());
+  ASSERT_EQ("music/jazz", folderMusic_->path());
 }
 
 TEST_F(FolderSuite, TestFolderName) {
-  ASSERT_EQ("111", folderDocument->name());
-  ASSERT_EQ("jazz", folderMusic->name());
+  ASSERT_EQ("111", folderDocument_->name());
+  ASSERT_EQ("jazz", folderMusic_->name());
 }

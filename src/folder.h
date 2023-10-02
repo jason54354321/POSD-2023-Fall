@@ -25,6 +25,15 @@ public:
     nodes.push_back(node);
   }
 
+  void remove(string path) override {
+    for (int i = 0; i < nodes.size(); i++) {
+      if (nodes[i]->path() == path) {
+        nodes.erase(nodes.begin() + i);
+        break;
+      }
+    }
+  }
+
   string path() const override {
     return _path;
   }

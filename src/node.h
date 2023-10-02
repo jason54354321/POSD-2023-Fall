@@ -14,9 +14,11 @@ public:
 
   virtual void add(Node *node){};
 
-  void remove(string path);
+  virtual void remove(string path){};
 
   Node *getChildByName(const char *name) const;
+
+  Node *find(string path);
 
   int numberOfFiles() const;
 

@@ -3,30 +3,30 @@
 
 class FileSuite : public testing::Test {
 protected:
-  File *_fileJPG;
-  File *_filePNG;
-  File *_fileNoExtension;
+  File *fileJPG_;
+  File *filePNG_;
+  File *fileNoExtension_;
 
   void SetUp() override {
-    _fileJPG = new File("/test/123.jpg");
-    _filePNG = new File("/test/456.png");
-    _fileNoExtension = new File("/test/789");
+    fileJPG_ = new File("/test/123.jpg");
+    filePNG_ = new File("/test/456.png");
+    fileNoExtension_ = new File("/test/789");
   }
 
   void TearDown() override {
-    delete (_fileJPG);
-    delete (_filePNG);
+    delete (fileJPG_);
+    delete (filePNG_);
   }
 };
 
 TEST_F(FileSuite, TestFilePath) {
-  ASSERT_EQ("/test/123.jpg", _fileJPG->path());
-  ASSERT_EQ("/test/456.png", _filePNG->path());
-  ASSERT_EQ("/test/789", _fileNoExtension->path());
+  ASSERT_EQ("/test/123.jpg", fileJPG_->path());
+  ASSERT_EQ("/test/456.png", filePNG_->path());
+  ASSERT_EQ("/test/789", fileNoExtension_->path());
 }
 
 TEST_F(FileSuite, TestFileName) {
-  ASSERT_EQ("123.jpg", _fileJPG->name());
-  ASSERT_EQ("456.png", _filePNG->name());
-  ASSERT_EQ("789", _fileNoExtension->name());
+  ASSERT_EQ("123.jpg", fileJPG_->name());
+  ASSERT_EQ("456.png", filePNG_->name());
+  ASSERT_EQ("789", fileNoExtension_->name());
 }
