@@ -12,10 +12,10 @@ class Folder;
 class Iterator {
 public:
   ~Iterator();
-  void first();
-  Node *currentItem() const;
-  void next();
-  bool isDone() const;
+  virtual void first() = 0;
+  virtual Node *currentItem() const = 0;
+  virtual void next() = 0;
+  virtual bool isDone() const = 0;
 };
 
 // Is a stateful class
@@ -26,10 +26,10 @@ private:
 
 public:
   FolderIterator(Folder *folder);
-  void first();
-  Node *currentItem() const;
-  void next();
-  bool isDone() const;
+  void first() override;
+  Node *currentItem() const override;
+  void next() override;
+  bool isDone() const override;
 };
 
 #endif // ITERATOR_H

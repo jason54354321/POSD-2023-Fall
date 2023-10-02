@@ -12,7 +12,7 @@ public:
 
   virtual string path() const = 0;
 
-  void add(Node *node);
+  virtual void add(Node *node){};
 
   void remove(string path);
 

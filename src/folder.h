@@ -21,6 +21,10 @@ public:
     _path = path;
   }
 
+  void add(Node *node) override {
+    nodes.push_back(node);
+  }
+
   string path() const override {
     return _path;
   }
