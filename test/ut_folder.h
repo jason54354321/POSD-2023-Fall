@@ -19,11 +19,11 @@ protected:
 };
 
 TEST_F(FolderSuite, TestFolderPath) {
-  ASSERT_EQ(_folderDocument->path(), "documents/111");
-  ASSERT_EQ(_folderMusic->path(), "music/jazz");
+  ASSERT_EQ("documents/111", _folderDocument->path());
+  ASSERT_EQ("music/jazz", _folderMusic->path());
 }
 
 TEST_F(FolderSuite, TestFolderName) {
-  ASSERT_EQ(_folderDocument->name(), "111");
-  ASSERT_EQ(_folderMusic->name(), "jazz");
+  ASSERT_EQ("111", _folderDocument->name());
+  ASSERT_EQ("jazz", _folderMusic->name());
 }

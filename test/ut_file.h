@@ -20,13 +20,13 @@ protected:
 };
 
 TEST_F(FileSuite, TestFilePath) {
-  ASSERT_EQ(_fileJPG->path(), "/test/123.jpg");
-  ASSERT_EQ(_filePNG->path(), "/test/456.png");
-  ASSERT_EQ(_fileNoExtension->path(), "/test/789");
+  ASSERT_EQ("/test/123.jpg", _fileJPG->path());
+  ASSERT_EQ("/test/456.png", _filePNG->path());
+  ASSERT_EQ("/test/789", _fileNoExtension->path());
 }
 
 TEST_F(FileSuite, TestFileName) {
-  ASSERT_EQ(_fileJPG->name(), "123.jpg");
-  ASSERT_EQ(_filePNG->name(), "456.png");
-  ASSERT_EQ(_fileNoExtension->name(), "789");
+  ASSERT_EQ("123.jpg", _fileJPG->name());
+  ASSERT_EQ("456.png", _filePNG->name());
+  ASSERT_EQ("789", _fileNoExtension->name());
 }
