@@ -5,17 +5,17 @@
 
 class FolderIteratorSuite : public ::testing::Test {
 protected:
-  Folder *_folderDocument;
-  Folder *_folderMusic;
+  Folder *folderDocument;
+  Folder *folderMusic;
 
   void SetUp() override {
-    _folderDocument = new Folder("documents/111");
-    _folderMusic = new Folder("music/jazz");
+    folderDocument = new Folder("documents/111");
+    folderMusic = new Folder("music/jazz");
   }
 
   void TearDown() override {
-    delete _folderDocument;
-    delete _folderMusic;
+    delete folderDocument;
+    delete folderMusic;
   }
 };
 
@@ -24,11 +24,11 @@ TEST_F(FolderIteratorSuite, TestFolderIterator) {
   File *music2 = new File("/music/456.mp3");
   Folder *musicSubFolder = new Folder("/music/sub");
 
-  _folderMusic->add(music1);
-  _folderMusic->add(music2);
-  _folderMusic->add(musicSubFolder);
+  folderMusic->add(music1);
+  folderMusic->add(music2);
+  folderMusic->add(musicSubFolder);
 
-  Iterator *it = _folderMusic->createIterator();
+  Iterator *it = folderMusic->createIterator();
 
   it->first();
   ASSERT_EQ("123.mp3", it->currentItem()->name());
