@@ -1,6 +1,6 @@
 #include "ut_file.h"
 #include "ut_folder.h"
-#include "ut_folderIterator.h"
+#include "ut_folder_iterator.h"
 #include <gtest/gtest.h>
 
 int main(int argc, char **argv) {
