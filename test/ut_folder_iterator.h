@@ -49,6 +49,53 @@ TEST_F(FolderIteratorSuite, TestFolderIterator) {
   delete musicSubFolder;
 }
 
+TEST_F(FolderIteratorSuite, TestFindCantFind) {
+  File *music1 = new File("/music/123.mp3");
+
+  Node *node;
+
+  node = music1->find("/music/000.mp3");
+  ASSERT_EQ(nullptr, node);
+
+  delete music1;
+}
+
+TEST_F(FolderIteratorSuite, TestFindFile) {
+  File *music1 = new File("/music/123.mp3");
+  File *music2 = new File("/music/456.mp3");
+
+  Node *node;
+
+  node = music1->find("/music/123.mp3");
+  ASSERT_EQ("123.mp3", node->name());
+
+  node = music2->find("/music/456.mp3");
+  ASSERT_EQ("456.mp3", node->name());
+
+  delete music1;
+  delete music2;
+}
+
+TEST_F(FolderIteratorSuite, TestFindNestedFolder) {
+  Folder *musicSubFolder = new Folder("/music/sub");
+  File *musicSubFolderMusic1 = new File("/music/sub/999.mp3");
+
+  // top-level
+  folderMusic_->add(musicSubFolder);
+  // second-level
+  musicSubFolder->add(musicSubFolderMusic1);
+
+  Node *node;
+
+  node = folderMusic_->find("/music/sub/999.mp3");
+  ASSERT_EQ("999.mp3", node->name());
+
+  delete musicSubFolder;
+  delete musicSubFolderMusic1;
+}
+
+// TODO: should be composite remove
+//			 had to start with find() method
 TEST_F(FolderIteratorSuite, TestFolderRemove) {
   File *music1 = new File("/music/123.mp3");
   File *music2 = new File("/music/456.mp3");

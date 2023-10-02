@@ -1,10 +1,11 @@
-#include "iterator.h"
 #if !defined(NODE_H)
 #define NODE_H
 
 #include <string>
 
 using namespace std;
+
+class Iterator;
 
 class Node {
 public:
@@ -18,7 +19,7 @@ public:
 
   Node *getChildByName(const char *name) const;
 
-  Node *find(string path);
+  virtual Node *find(string path) = 0;
 
   int numberOfFiles() const;
 

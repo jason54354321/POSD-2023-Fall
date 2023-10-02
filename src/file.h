@@ -16,6 +16,13 @@ public:
     _path = path;
   }
 
+  Node *find(string path) override {
+    if (this->path() == path) {
+      return this;
+    }
+    return nullptr;
+  }
+
   string path() const override {
     return _path;
   }

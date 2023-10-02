@@ -1,13 +1,14 @@
+#if !defined(FOLDER)
+#define FOLDER
+
+#include "file.h"
 #include "iterator.h"
 #include "node.h"
 #include <regex>
 #include <string>
 #include <vector>
 
-#if !defined(FOLDER)
-#define FOLDER
-
-using namespace std;
+class Folder;
 
 class Folder : public Node {
   friend class FolderIterator;
@@ -32,6 +33,29 @@ public:
         break;
       }
     }
+  }
+
+  Node *find(string path) override {
+    Iterator *it = this->createIterator();
+
+    for (it->first(); !it->isDone(); it->next()) {
+      Node *node = it->currentItem();
+
+      // ugly code
+      File *file = dynamic_cast<File *>(node);
+      if (file) {
+        if (file->path() == path) {
+          return file;
+        }
+      }
+
+      Folder *folder = dynamic_cast<class Folder *>(node);
+      if (folder) {
+        return folder->find(path);
+      }
+    }
+
+    return nullptr;
   }
 
   string path() const override {
