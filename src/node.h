@@ -17,7 +17,9 @@ public:
 
   virtual void remove(string path){};
 
-  Node *getChildByName(const char *name) const;
+  virtual Node *getChildByName(const char *name) const {
+    return nullptr;
+  };
 
   virtual Node *find(string path) = 0;
 

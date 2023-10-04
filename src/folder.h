@@ -15,7 +15,7 @@ class Folder : public Node {
   friend class FolderIterator;
 
 private:
-  vector<Node *> nodes;
+  vector<Node *> _nodes;
   string _path;
 
 public:
@@ -24,7 +24,7 @@ public:
   }
 
   void add(Node *node) override {
-    nodes.push_back(node);
+    _nodes.push_back(node);
   }
 
   void remove(string path) override {
@@ -39,7 +39,7 @@ public:
       File *file = dynamic_cast<File *>(node);
       if (file) {
         if (file->path() == path) {
-          nodes.erase(nodes.begin() + index);
+          _nodes.erase(_nodes.begin() + index);
           return;
         }
       }
@@ -49,6 +49,15 @@ public:
         folder->remove(path);
       }
     }
+  }
+
+  Node *getChildByName(const char *name) const override {
+    for (Node *node : _nodes) {
+      if (node->name() == name) {
+        return node;
+      }
+    }
+    return nullptr;
   }
 
   Node *find(string path) override {

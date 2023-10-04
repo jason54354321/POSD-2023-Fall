@@ -1,11 +1,11 @@
-#include "folder.h"
 #include "iterator.h"
+#include "folder.h"
 
 FolderIterator::FolderIterator(Folder *folder) : _folder(folder) {
 }
 
 void FolderIterator::first() {
-  _it = _folder->nodes.begin();
+  _it = _folder->_nodes.begin();
 }
 
 Node *FolderIterator::currentItem() const {
@@ -13,7 +13,7 @@ Node *FolderIterator::currentItem() const {
 }
 
 bool FolderIterator::isDone() const {
-  return _it == _folder->nodes.end();
+  return _it == _folder->_nodes.end();
 }
 
 void FolderIterator::next() {

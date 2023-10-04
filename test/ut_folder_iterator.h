@@ -86,5 +86,12 @@ TEST_F(FolderIteratorSuite, TestRemove) {
   ASSERT_EQ(nullptr, folderMusic_->find("/music/sub/999.mp3"));
 }
 
+TEST_F(FolderIteratorSuite, TestGetChildByNameNotfound) {
+  ASSERT_EQ(nullptr, folderMusic_->getChildByName("000.mp3"));
+}
+
 TEST_F(FolderIteratorSuite, TestGetChildByName) {
+  ASSERT_EQ("123.mp3", folderMusic_->getChildByName("123.mp3")->name());
+  ASSERT_EQ("456.mp3", folderMusic_->getChildByName("456.mp3")->name());
+  ASSERT_EQ("sub", folderMusic_->getChildByName("sub")->name());
 }
