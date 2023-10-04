@@ -29,7 +29,9 @@ public:
     return 0;
   };
 
-  virtual Iterator *createIterator() = 0;
+  virtual Iterator *createIterator() {
+    return nullptr;
+  };
 
   /* Iterator * createIterator(); */
 };

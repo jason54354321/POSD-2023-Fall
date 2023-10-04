@@ -36,10 +36,6 @@ public:
     }
     return "Regex found no string";
   }
-
-  Iterator *createIterator() override {
-    return nullptr;
-  }
 };
 
 #endif // FILE_H
