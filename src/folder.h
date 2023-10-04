@@ -60,21 +60,21 @@ public:
   }
 
   Node *find(string path) override {
-    for (Node *node : _nodes) {
-      File *file = dynamic_cast<File *>(node);
-      if (file) {
-        if (file->path() == path) {
-          return file;
-        }
-      }
+    if (this->path() == path) {
+      return this;
+    }
 
-      Folder *folder = dynamic_cast<class Folder *>(node);
-      if (folder) {
-        return folder->find(path);
+    for (Node *node : _nodes) {
+      if (!isNullPtr(node->find(path))) {
+        return node->find(path);
       }
     }
 
     return nullptr;
+  }
+
+  bool isNullPtr(Node *node) {
+    return node == nullptr;
   }
 
   int numberOfFiles() const override {
