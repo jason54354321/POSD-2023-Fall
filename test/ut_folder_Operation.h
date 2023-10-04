@@ -95,3 +95,7 @@ TEST_F(FolderOperatingSuite, TestGetChildByName) {
   ASSERT_EQ("456.mp3", folderMusic_->getChildByName("456.mp3")->name());
   ASSERT_EQ("sub", folderMusic_->getChildByName("sub")->name());
 }
+
+TEST_F(FolderOperatingSuite, TestNumberOfFiles) {
+  ASSERT_EQ(3, folderMusic_->numberOfFiles());
+}
