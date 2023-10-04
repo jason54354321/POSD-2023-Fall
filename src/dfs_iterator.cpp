@@ -10,10 +10,10 @@ void DfsIterator::first() {
   currentIndex = 0;
 
   _vec.push_back(_folder);
-  helper(_folder);
+  dfsHelper(_folder);
 }
 
-void DfsIterator::helper(Node *folder) {
+void DfsIterator::dfsHelper(Node *folder) {
   Iterator *it = folder->createIterator();
   for (it->first(); !it->isDone(); it->next()) {
     Node *node = it->currentItem();
@@ -26,7 +26,7 @@ void DfsIterator::helper(Node *folder) {
     Folder *folder = dynamic_cast<Folder *>(node);
     if (folder) {
       _vec.push_back(folder);
-      helper(folder);
+      dfsHelper(folder);
     }
   }
 }
@@ -51,17 +51,15 @@ BfsIterator::BfsIterator(Node *folder) : _folder(folder) {
 
 void BfsIterator::first() {
   _q.push(_folder);
+  bfsHelper();
 }
 
-void BfsIterator::helper() {
+void BfsIterator::bfsHelper() {
   while (!_q.empty()) {
     Node *node = _q.front();
     _q.pop();
 
-    File *file = dynamic_cast<File *>(node);
-    if (file) {
-      _q.push(file);
-    }
+    _vec.push_back(node);
 
     Folder *folder = dynamic_cast<Folder *>(node);
     if (folder) {

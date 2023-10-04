@@ -16,7 +16,7 @@ private:
   vector<Node *> _vec;
   int currentIndex = 0;
 
-  void helper(Node *folder);
+  void dfsHelper(Node *folder);
 
 public:
   DfsIterator(Node *folder);
@@ -36,7 +36,7 @@ private:
   vector<Node *> _vec;
   queue<Node *> _q;
   int currentIndex = 0;
-  void helper();
+  void bfsHelper();
 
 public:
   BfsIterator(Node *folder);
