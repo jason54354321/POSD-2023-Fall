@@ -29,18 +29,25 @@ public:
     _nodes.push_back(node);
   }
 
+  // TODO: delete ptr by dfsIterator
   void remove(string path) override {
+    if (this->path() == path) {
+      delete this;
+      return;
+    }
+
+    removeHelper(path);
+  }
+
+  void removeHelper(string path) {
     int index = -1;
     for (Node *node : _nodes) {
       index++;
 
-      // ugly code
-      File *file = dynamic_cast<File *>(node);
-      if (file) {
-        if (file->path() == path) {
-          _nodes.erase(_nodes.begin() + index);
-          return;
-        }
+      if (node->path() == path) {
+        _nodes.erase(_nodes.begin() + index);
+        delete node;
+        return;
       }
 
       Folder *folder = dynamic_cast<class Folder *>(node);

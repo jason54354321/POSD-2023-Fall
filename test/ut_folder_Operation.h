@@ -13,9 +13,9 @@ protected:
   File *musicSubFolderMusic1_;
 
   void SetUp() override {
-    folderDocument_ = new Folder("documents/111");
+    folderDocument_ = new Folder("/documents/111");
 
-    folderMusic_ = new Folder("music");
+    folderMusic_ = new Folder("/music");
     music1_ = new File("/music/123.mp3");
     music2_ = new File("/music/456.mp3");
     musicSubFolder_ = new Folder("/music/sub");
@@ -75,7 +75,24 @@ TEST_F(FolderOperatingSuite, TestFindNestedFolder) {
   ASSERT_EQ("999.mp3", node->name());
 }
 
-TEST_F(FolderOperatingSuite, TestRemove) {
+TEST(FolderRemoveSuite, TestRemoveFile) {
+  Folder *folderMusic_;
+  File *music1_;
+  File *music2_;
+  Folder *musicSubFolder_;
+  File *musicSubFolderMusic1_;
+
+  folderMusic_ = new Folder("/music");
+  music1_ = new File("/music/123.mp3");
+  music2_ = new File("/music/456.mp3");
+  musicSubFolder_ = new Folder("/music/sub");
+  musicSubFolderMusic1_ = new File("/music/sub/999.mp3");
+
+  folderMusic_->add(music1_);
+  folderMusic_->add(music2_);
+  folderMusic_->add(musicSubFolder_);
+  musicSubFolder_->add(musicSubFolderMusic1_);
+
   // Remove
   folderMusic_->remove("/music/123.mp3");
   folderMusic_->remove("/music/sub/999.mp3");
@@ -84,6 +101,33 @@ TEST_F(FolderOperatingSuite, TestRemove) {
   ASSERT_EQ(nullptr, folderMusic_->find("/music/123.mp3"));
   ASSERT_EQ("456.mp3", folderMusic_->find("/music/456.mp3")->name());
   ASSERT_EQ(nullptr, folderMusic_->find("/music/sub/999.mp3"));
+
+  // clear
+  delete folderMusic_;
+  delete music2_;
+  delete musicSubFolder_;
+}
+
+TEST(FolderRemoveSuite, TestRemoveRootFolder) {
+  Folder *folderMusic_;
+  Folder *musicSubFolder_;
+  File *musicSubFolderMusic1_;
+
+  folderMusic_ = new Folder("/music");
+  musicSubFolder_ = new Folder("/music/sub");
+  musicSubFolderMusic1_ = new File("/music/sub/999.mp3");
+
+  folderMusic_->add(musicSubFolder_);
+  musicSubFolder_->add(musicSubFolderMusic1_);
+
+  // Remove
+  folderMusic_->remove("/music/sub");
+
+  // After
+  ASSERT_EQ(nullptr, folderMusic_->find("/music/sub"));
+
+  delete folderMusic_;
+  delete musicSubFolderMusic1_;
 }
 
 TEST_F(FolderOperatingSuite, TestGetChildByNameNotfound) {
