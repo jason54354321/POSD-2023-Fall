@@ -25,7 +25,9 @@ public:
 
   virtual Node *find(string path) = 0;
 
-  int numberOfFiles() const;
+  virtual int numberOfFiles() const {
+    return 0;
+  };
 
   virtual Iterator *createIterator() = 0;
 

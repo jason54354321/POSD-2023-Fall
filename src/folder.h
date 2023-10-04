@@ -75,6 +75,24 @@ public:
     return nullptr;
   }
 
+  int numberOfFiles() const override {
+    int output = 0;
+    for (Node *node : _nodes) {
+      File *file = dynamic_cast<File *>(node);
+
+      if (file) {
+        output++;
+      }
+
+      Folder *folder = dynamic_cast<class Folder *>(node);
+      if (folder) {
+        output += folder->numberOfFiles();
+      }
+    }
+
+    return output;
+  }
+
   string path() const override {
     return _path;
   }
