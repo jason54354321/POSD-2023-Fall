@@ -3,7 +3,7 @@
 #include "../src/iterator.h"
 #include <gtest/gtest.h>
 
-class FolderIteratorSuite : public ::testing::Test {
+class FolderOperatingSuite : public ::testing::Test {
 protected:
   Folder *folderDocument_;
   Folder *folderMusic_;
@@ -37,7 +37,7 @@ protected:
   }
 };
 
-TEST_F(FolderIteratorSuite, TestFolderIterator) {
+TEST_F(FolderOperatingSuite, TestFolderIterator) {
   Iterator *it = folderMusic_->createIterator();
 
   it->first();
@@ -55,12 +55,12 @@ TEST_F(FolderIteratorSuite, TestFolderIterator) {
   ASSERT_EQ(true, it->isDone());
 }
 
-TEST_F(FolderIteratorSuite, TestFindCantFind) {
+TEST_F(FolderOperatingSuite, TestFindCantFind) {
   Node *node = music1_->find("/music/000.mp3");
   ASSERT_EQ(nullptr, node);
 }
 
-TEST_F(FolderIteratorSuite, TestFindFile) {
+TEST_F(FolderOperatingSuite, TestFindFile) {
   Node *node = music1_->find("/music/123.mp3");
   ASSERT_EQ("123.mp3", node->name());
 
@@ -68,14 +68,14 @@ TEST_F(FolderIteratorSuite, TestFindFile) {
   ASSERT_EQ("456.mp3", node->name());
 }
 
-TEST_F(FolderIteratorSuite, TestFindNestedFolder) {
+TEST_F(FolderOperatingSuite, TestFindNestedFolder) {
   Node *node;
 
   node = folderMusic_->find("/music/sub/999.mp3");
   ASSERT_EQ("999.mp3", node->name());
 }
 
-TEST_F(FolderIteratorSuite, TestRemove) {
+TEST_F(FolderOperatingSuite, TestRemove) {
   // Remove
   folderMusic_->remove("/music/123.mp3");
   folderMusic_->remove("/music/sub/999.mp3");
@@ -86,11 +86,11 @@ TEST_F(FolderIteratorSuite, TestRemove) {
   ASSERT_EQ(nullptr, folderMusic_->find("/music/sub/999.mp3"));
 }
 
-TEST_F(FolderIteratorSuite, TestGetChildByNameNotfound) {
+TEST_F(FolderOperatingSuite, TestGetChildByNameNotfound) {
   ASSERT_EQ(nullptr, folderMusic_->getChildByName("000.mp3"));
 }
 
-TEST_F(FolderIteratorSuite, TestGetChildByName) {
+TEST_F(FolderOperatingSuite, TestGetChildByName) {
   ASSERT_EQ("123.mp3", folderMusic_->getChildByName("123.mp3")->name());
   ASSERT_EQ("456.mp3", folderMusic_->getChildByName("456.mp3")->name());
   ASSERT_EQ("sub", folderMusic_->getChildByName("sub")->name());

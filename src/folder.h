@@ -28,12 +28,9 @@ public:
   }
 
   void remove(string path) override {
-    Iterator *it = this->createIterator();
-
     int index = -1;
-    for (it->first(); !it->isDone(); it->next()) {
+    for (Node *node : _nodes) {
       index++;
-      Node *node = it->currentItem();
 
       // ugly code
       File *file = dynamic_cast<File *>(node);
@@ -61,12 +58,7 @@ public:
   }
 
   Node *find(string path) override {
-    Iterator *it = this->createIterator();
-
-    for (it->first(); !it->isDone(); it->next()) {
-      Node *node = it->currentItem();
-
-      // ugly code
+    for (Node *node : _nodes) {
       File *file = dynamic_cast<File *>(node);
       if (file) {
         if (file->path() == path) {
