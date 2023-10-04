@@ -3,26 +3,38 @@
 
 #include "iterator.h"
 
+using namespace std;
+
 class DfsIterator : public Iterator {
+private:
+  Node *_folder;
+
 public:
-  DfsIterator(Node *composite);
+  DfsIterator(Node *folder) : _folder(folder){};
 
-  void first();
+  void first() override;
 
-  Node *currentItem() const;
+  Node *currentItem() const override;
 
-  void next();
+  void next() override;
 
-  bool isDone() const;
+  bool isDone() const override;
 };
 
 class BfsIterator : public Iterator {
+private:
+  Node *_folder;
+
 public:
-  BfsIterator(Node *composite);
-  void first();
-  Node *currentItem() const;
-  void next();
-  bool isDone() const;
+  BfsIterator(Node *folder) : _folder(folder){};
+
+  void first() override;
+
+  Node *currentItem() const override;
+
+  void next() override;
+
+  bool isDone() const override;
 };
 
 #endif // DFS_ITERATOR_H
