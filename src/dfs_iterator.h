@@ -1,16 +1,25 @@
+#include "folder.h"
+#include "iterator.h"
+#include "node.h"
+#include <queue>
+#include <stack>
+#include <vector>
+
 #if !defined(DFS_ITERATOR_H)
 #define DFS_ITERATOR_H
-
-#include "iterator.h"
 
 using namespace std;
 
 class DfsIterator : public Iterator {
 private:
   Node *_folder;
+  vector<Node *> _vec;
+  int currentIndex = 0;
+
+  void helper(Node *folder);
 
 public:
-  DfsIterator(Node *folder) : _folder(folder){};
+  DfsIterator(Node *folder);
 
   void first() override;
 
@@ -24,9 +33,13 @@ public:
 class BfsIterator : public Iterator {
 private:
   Node *_folder;
+  vector<Node *> _vec;
+  queue<Node *> _q;
+  int currentIndex = 0;
+  void helper();
 
 public:
-  BfsIterator(Node *folder) : _folder(folder){};
+  BfsIterator(Node *folder);
 
   void first() override;
 

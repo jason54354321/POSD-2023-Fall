@@ -1,10 +1,10 @@
-#include <iostream>
 #if !defined(FOLDER)
 #define FOLDER
 
 #include "file.h"
 #include "iterator.h"
 #include "node.h"
+#include <iostream>
 #include <regex>
 #include <string>
 #include <vector>
@@ -13,6 +13,8 @@ class Folder;
 
 class Folder : public Node {
   friend class FolderIterator;
+  friend class DfsIterator;
+  friend class BfsIterator;
 
 private:
   vector<Node *> _nodes;

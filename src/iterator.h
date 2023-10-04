@@ -1,12 +1,12 @@
 #if !defined(ITERATOR_H)
 #define ITERATOR_H
 
+#include "node.h"
 #include <list>
 #include <vector>
 
 #pragma once
 
-class Node;
 class Folder;
 
 class Iterator {

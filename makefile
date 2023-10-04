@@ -1,9 +1,11 @@
 HEADER= src/node.h \
 					src/file.h \
 					src/iterator.h \
+					src/dfs_iterator.h \
 					test/ut_file.h \
+					test/ut_iterator_dfs.h \
 
-OBJECTS= iterator.o
+OBJECTS= iterator.o dfs_iterator.o
 
 .PHONY: directories clean stat
 
@@ -16,7 +18,7 @@ ifeq ($(OS),Windows_NT)
   
   all: bin/ut_all bin/main
 else
-  all: clean directories bin/ut_all bin/main
+  all: directories bin/ut_all bin/main
 endif
 
 
@@ -28,8 +30,10 @@ bin/ut_all: test/ut_all.cpp $(OBJECTS) $(HEADER)
 	g++ -g -std=c++14 test/ut_all.cpp obj/* -o bin/ut_all -lgtest -lpthread
 
 iterator.o: src/iterator.cpp src/iterator.h $(HEADER)
-	g++ -std=c++14 -c src/iterator.cpp -o obj/iterator.o
+	g++ -g -std=c++14 -c src/iterator.cpp -o obj/iterator.o
 
+dfs_iterator.o: src/dfs_iterator.cpp src/dfs_iterator.h $(HEADER)
+	g++ -g -std=c++14 -c src/dfs_iterator.cpp -o obj/dfs_iterator.o
 
 directories:
 	mkdir -p bin
