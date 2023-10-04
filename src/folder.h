@@ -1,3 +1,4 @@
+#include <iostream>
 #if !defined(FOLDER)
 #define FOLDER
 
@@ -27,10 +28,25 @@ public:
   }
 
   void remove(string path) override {
-    for (int i = 0; i < nodes.size(); i++) {
-      if (nodes[i]->path() == path) {
-        nodes.erase(nodes.begin() + i);
-        break;
+    Iterator *it = this->createIterator();
+
+    int index = -1;
+    for (it->first(); !it->isDone(); it->next()) {
+      index++;
+      Node *node = it->currentItem();
+
+      // ugly code
+      File *file = dynamic_cast<File *>(node);
+      if (file) {
+        if (file->path() == path) {
+          nodes.erase(nodes.begin() + index);
+          return;
+        }
+      }
+
+      Folder *folder = dynamic_cast<class Folder *>(node);
+      if (folder) {
+        folder->remove(path);
       }
     }
   }

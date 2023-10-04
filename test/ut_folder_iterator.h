@@ -10,7 +10,7 @@ protected:
 
   void SetUp() override {
     folderDocument_ = new Folder("documents/111");
-    folderMusic_ = new Folder("music/jazz");
+    folderMusic_ = new Folder("music");
   }
 
   void TearDown() override {
@@ -96,47 +96,32 @@ TEST_F(FolderIteratorSuite, TestFindNestedFolder) {
 
 // TODO: should be composite remove
 //			 had to start with find() method
-TEST_F(FolderIteratorSuite, TestFolderRemove) {
+TEST_F(FolderIteratorSuite, TestRemove) {
   File *music1 = new File("/music/123.mp3");
   File *music2 = new File("/music/456.mp3");
   Folder *musicSubFolder = new Folder("/music/sub");
+  File *musicSubFolderMusic1 = new File("/music/sub/999.mp3");
 
+  // top-level
   folderMusic_->add(music1);
   folderMusic_->add(music2);
   folderMusic_->add(musicSubFolder);
+  // second-level
+  musicSubFolder->add(musicSubFolderMusic1);
 
-  Iterator *it = folderMusic_->createIterator();
-
-  // Origin
-  it->first();
-  ASSERT_EQ("123.mp3", it->currentItem()->name());
-
-  it->next();
-  ASSERT_EQ("456.mp3", it->currentItem()->name());
-  ASSERT_EQ(false, it->isDone());
-
-  it->next();
-  ASSERT_EQ("sub", it->currentItem()->name());
-  ASSERT_EQ(false, it->isDone());
-
-  it->next();
-  ASSERT_EQ(true, it->isDone());
+  ASSERT_EQ("999.mp3", folderMusic_->find("/music/sub/999.mp3")->name());
 
   // Remove
-  folderMusic_->remove("/music/456.mp3");
+  folderMusic_->remove("/music/123.mp3");
+  folderMusic_->remove("/music/sub/999.mp3");
 
   // After
-  it->first();
-  ASSERT_EQ("123.mp3", it->currentItem()->name());
-
-  it->next();
-  ASSERT_EQ("sub", it->currentItem()->name());
-  ASSERT_EQ(false, it->isDone());
-
-  it->next();
-  ASSERT_EQ(true, it->isDone());
+  ASSERT_EQ(nullptr, folderMusic_->find("/music/123.mp3"));
+  ASSERT_EQ("456.mp3", folderMusic_->find("/music/456.mp3")->name());
+  ASSERT_EQ(nullptr, folderMusic_->find("/music/sub/999.mp3"));
 
   delete music1;
   delete music2;
   delete musicSubFolder;
+  delete musicSubFolderMusic1;
 }
