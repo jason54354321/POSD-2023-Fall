@@ -5,7 +5,7 @@ HEADER= src/node.h \
 					test/ut_file.h \
 					test/ut_iterator_dfs.h \
 
-OBJECTS= iterator.o dfs_iterator.o
+OBJECTS= iterator.o
 
 .PHONY: directories clean stat
 
@@ -31,9 +31,6 @@ bin/ut_all: test/ut_all.cpp $(OBJECTS) $(HEADER)
 
 iterator.o: src/iterator.cpp src/iterator.h $(HEADER)
 	g++ -g -std=c++14 -c src/iterator.cpp -o obj/iterator.o
-
-dfs_iterator.o: src/dfs_iterator.cpp src/dfs_iterator.h $(HEADER)
-	g++ -g -std=c++14 -c src/dfs_iterator.cpp -o obj/dfs_iterator.o
 
 directories:
 	mkdir -p bin
