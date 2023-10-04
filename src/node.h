@@ -9,6 +9,8 @@ class Iterator;
 
 class Node {
 public:
+  virtual ~Node() {
+  }
   virtual string name() const = 0;
 
   virtual string path() const = 0;
