@@ -79,10 +79,8 @@ TEST_F(FolderDfsSuite, TestBfsIterator) {
   Iterator *it = new BfsIterator(folder1_);
 
   it->first();
-  ASSERT_EQ("1", it->currentItem()->name());
-
-  it->next();
   ASSERT_EQ("2", it->currentItem()->name());
+
   it->next();
   ASSERT_EQ("file1.cpp", it->currentItem()->name());
   it->next();

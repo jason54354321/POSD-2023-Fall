@@ -37,7 +37,6 @@ void DfsIterator::dfsHelper(Node *folder) {
   Iterator *it = folder->createIterator();
   for (it->first(); !it->isDone(); it->next()) {
     Node *node = it->currentItem();
-    cout << node->path() << endl;
 
     File *file = dynamic_cast<File *>(node);
     if (file) {
@@ -80,7 +79,10 @@ void BfsIterator::bfsHelper() {
     Node *node = _q.front();
     _q.pop();
 
-    _vec.push_back(node);
+    // dont push root directory
+    if (node != _folder) {
+      _vec.push_back(node);
+    }
 
     Folder *folder = dynamic_cast<Folder *>(node);
     if (folder) {
