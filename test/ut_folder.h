@@ -8,8 +8,8 @@ protected:
   Folder *folderMusic_;
 
   void SetUp() override {
-    folderDocument_ = new Folder("documents/111");
-    folderMusic_ = new Folder("music/jazz");
+    folderDocument_ = new Folder("/documents/111");
+    folderMusic_ = new Folder("/music/jazz");
   }
 
   void TearDown() override {
@@ -19,11 +19,21 @@ protected:
 };
 
 TEST_F(FolderSuite, TestFolderPath) {
-  ASSERT_EQ("documents/111", folderDocument_->path());
-  ASSERT_EQ("music/jazz", folderMusic_->path());
+  ASSERT_EQ("/documents/111", folderDocument_->path());
+  ASSERT_EQ("/music/jazz", folderMusic_->path());
 }
 
 TEST_F(FolderSuite, TestFolderName) {
   ASSERT_EQ("111", folderDocument_->name());
   ASSERT_EQ("jazz", folderMusic_->name());
+}
+
+TEST(FolderAddSuite, TestInvalidAdd) {
+  Folder *folder;
+  Folder *toAdd;
+
+  folder = new Folder("/test");
+  toAdd = new Folder("/toAdd");
+
+  ASSERT_THROW(folder->add(toAdd), const char *);
 }

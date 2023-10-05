@@ -18,13 +18,13 @@ protected:
 
   void SetUp() override {
     folder1_ = new Folder("/1");
-    folder2_ = new Folder("/2");
-    folder3_ = new Folder("/3");
-    folder4_ = new Folder("/4");
-    folder5_ = new Folder("/5");
-    folder6_ = new Folder("/6");
-    folder7_ = new Folder("/7");
-    folder8_ = new Folder("/8");
+    folder2_ = new Folder("/1/2");
+    folder3_ = new Folder("/1/3");
+    folder4_ = new Folder("/1/2/4");
+    folder5_ = new Folder("/1/2/5");
+    folder6_ = new Folder("/1/3/6");
+    folder7_ = new Folder("/1/3/7");
+    folder8_ = new Folder("/1/2/4/8");
 
     file1_ = new File("/1/file1.cpp");
 

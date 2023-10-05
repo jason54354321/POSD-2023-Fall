@@ -26,7 +26,27 @@ public:
   }
 
   void add(Node *node) override {
-    _nodes.push_back(node);
+    // TODO: validate
+    string nodeFullPath = node->path();
+
+    const regex regex("^(.*)\\/");
+    smatch string_pieces;
+
+    string nodeDirPath;
+    if (regex_search(nodeFullPath, string_pieces, regex)) {
+      cout << string_pieces[1] << endl;
+      nodeDirPath = string_pieces[1];
+    }
+    /* if (nodeDirPath == " ") { */
+    /*   nodeDirPath = "/"; */
+    /* } */
+    if (string_pieces[1] == _path) {
+      _nodes.push_back(node);
+      cout << "yes";
+    } else {
+      throw "Invalid path exception";
+      cout << "no";
+    }
   }
 
   // TODO: delete ptr by dfsIterator
