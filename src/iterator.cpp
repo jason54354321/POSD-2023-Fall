@@ -29,7 +29,7 @@ DfsIterator::DfsIterator(Node *folder) : _folder(folder) {
 void DfsIterator::first() {
   currentIndex = 0;
 
-  _vec.push_back(_folder);
+  /* _vec.push_back(_folder); */
   dfsHelper(_folder);
 }
 

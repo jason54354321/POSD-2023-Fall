@@ -57,10 +57,8 @@ TEST_F(FolderDfsSuite, TestDfsIterator) {
   Iterator *it = new DfsIterator(folder1_);
 
   it->first();
-  ASSERT_EQ("1", it->currentItem()->name());
-
-  it->next();
   ASSERT_EQ("2", it->currentItem()->name());
+
   it->next();
   ASSERT_EQ("4", it->currentItem()->name());
   it->next();
