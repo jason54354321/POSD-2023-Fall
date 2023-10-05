@@ -52,7 +52,7 @@ public:
 
       Folder *folder = dynamic_cast<class Folder *>(node);
       if (folder) {
-        folder->remove(path);
+        folder->removeHelper(path);
       }
     }
   }
