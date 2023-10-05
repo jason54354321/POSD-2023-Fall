@@ -31,15 +31,6 @@ public:
 
   // TODO: delete ptr by dfsIterator
   void remove(string path) override {
-    /* if (this->path() == path) { */
-    /*   delete this; */
-    /*   return; */
-    /* } */
-
-    removeHelper(path);
-  }
-
-  void removeHelper(string path) {
     int index = -1;
     for (Node *node : _nodes) {
       index++;
@@ -52,7 +43,7 @@ public:
 
       Folder *folder = dynamic_cast<class Folder *>(node);
       if (folder) {
-        folder->removeHelper(path);
+        folder->remove(path);
       }
     }
   }

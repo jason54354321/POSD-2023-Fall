@@ -2,6 +2,7 @@
 #include "dfs_iterator.h"
 #include "folder.h"
 #include "node.h"
+#include <iostream>
 
 FolderIterator::FolderIterator(Folder *folder) : _folder(folder) {
 }
@@ -36,6 +37,7 @@ void DfsIterator::dfsHelper(Node *folder) {
   Iterator *it = folder->createIterator();
   for (it->first(); !it->isDone(); it->next()) {
     Node *node = it->currentItem();
+    cout << node->path() << endl;
 
     File *file = dynamic_cast<File *>(node);
     if (file) {
