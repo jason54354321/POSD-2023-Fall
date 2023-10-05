@@ -31,10 +31,10 @@ public:
 
   // TODO: delete ptr by dfsIterator
   void remove(string path) override {
-    if (this->path() == path) {
-      delete this;
-      return;
-    }
+    /* if (this->path() == path) { */
+    /*   delete this; */
+    /*   return; */
+    /* } */
 
     removeHelper(path);
   }
@@ -46,7 +46,7 @@ public:
 
       if (node->path() == path) {
         _nodes.erase(_nodes.begin() + index);
-        delete node;
+        /* delete node; */
         return;
       }
 
