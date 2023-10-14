@@ -16,20 +16,20 @@ ifeq ($(OS),Windows_NT)
   SHELL := powershell.exe
   .SHELLFLAGS := -NoProfile -Command
   
-  all: bin/ut_all bin/main
+  all: bin/ut_all
 else
-  all: directories bin/ut_all bin/main
+  all: directories bin/ut_all
 endif
 
 
 
-bin/main: src/main.cpp $(OBJECTS) $(HEADER)
-	g++ -g -std=c++14 src/main.cpp obj/* -o bin/main
+# bin/main: src/main.cpp $(OBJECTS) $(HEADER)
+# 	g++ -g -std=c++14 src/main.cpp obj/* -o bin/main
 
 bin/ut_all: test/ut_all.cpp $(OBJECTS) $(HEADER)
 	g++ -g -std=c++14 test/ut_all.cpp obj/* -o bin/ut_all -lgtest -lpthread
 
-iterator.o: src/iterator.cpp src/iterator.h $(HEADER)
+$(OBJECTS): src/iterator.cpp src/iterator.h $(HEADER)
 	g++ -g -std=c++14 -c src/iterator.cpp -o obj/iterator.o
 
 directories:

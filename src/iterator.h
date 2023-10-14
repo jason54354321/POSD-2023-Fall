@@ -18,18 +18,4 @@ public:
   virtual bool isDone() const = 0;
 };
 
-// Is a stateful class
-class FolderIterator : public Iterator {
-private:
-  Folder *_folder;
-  std::vector<Node *>::iterator _it;
-
-public:
-  FolderIterator(Folder *folder);
-  void first() override;
-  Node *currentItem() const override;
-  void next() override;
-  bool isDone() const override;
-};
-
 #endif // ITERATOR_H

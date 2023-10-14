@@ -2,24 +2,23 @@
 #include "dfs_iterator.h"
 #include "folder.h"
 #include "node.h"
-#include <iostream>
 
-FolderIterator::FolderIterator(Folder *folder) : _folder(folder) {
+Folder::FolderIterator::FolderIterator(Folder *folder) : _folder(folder) {
 }
 
-void FolderIterator::first() {
+void Folder::FolderIterator::first() {
   _it = _folder->_nodes.begin();
 }
 
-Node *FolderIterator::currentItem() const {
+Node *Folder::FolderIterator::currentItem() const {
   return *_it;
 }
 
-bool FolderIterator::isDone() const {
+bool Folder::FolderIterator::isDone() const {
   return _it == _folder->_nodes.end();
 }
 
-void FolderIterator::next() {
+void Folder::FolderIterator::next() {
   _it++;
 }
 

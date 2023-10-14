@@ -12,13 +12,28 @@
 class Folder;
 
 class Folder : public Node {
-  friend class FolderIterator;
   friend class DfsIterator;
   friend class BfsIterator;
 
-private:
+protected:
   vector<Node *> _nodes;
+
+private:
   string _path;
+
+  // a inner class, client won't know the existence of this class
+  class FolderIterator : public Iterator {
+  private:
+    Folder *_folder;
+    std::vector<Node *>::iterator _it;
+
+  public:
+    FolderIterator(Folder *folder);
+    void first() override;
+    Node *currentItem() const override;
+    void next() override;
+    bool isDone() const override;
+  };
 
 public:
   Folder(string path) {
@@ -34,7 +49,6 @@ public:
 
     string nodeDirPath;
     if (regex_search(nodeFullPath, string_pieces, regex)) {
-      cout << string_pieces[1] << endl;
       nodeDirPath = string_pieces[1];
     }
     /* if (nodeDirPath == " ") { */
@@ -42,10 +56,8 @@ public:
     /* } */
     if (string_pieces[1] == _path) {
       _nodes.push_back(node);
-      cout << "yes";
     } else {
       throw "Invalid path exception";
-      cout << "no";
     }
   }
 
