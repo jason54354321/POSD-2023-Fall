@@ -38,10 +38,11 @@ private:
 public:
   Folder(string path) {
     _path = path;
+
+    // TODO: OS
   }
 
   void add(Node *node) override {
-    // TODO: validate
     string nodeFullPath = node->path();
 
     const regex regex("^(.*)\\/");

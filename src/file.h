@@ -3,6 +3,7 @@
 #include <iostream>
 #include <regex>
 #include <string>
+#include <sys/stat.h>
 #if !defined(FILE_H)
 #define FILE_H
 
@@ -14,6 +15,36 @@ private:
 public:
   File(string path) {
     _path = path;
+    struct stat sb;
+    // TODO: link with OS
+
+    if (stat("/home/jason/test", &sb) == -1) {
+      perror("stat");
+      exit(EXIT_FAILURE);
+    }
+
+    switch (sb.st_mode & S_IFMT) {
+    case S_IFBLK:
+      printf("block device\n");
+      break;
+    case S_IFCHR:
+      printf("character device\n");
+      break;
+    case S_IFDIR:
+      printf("directory\n");
+      break;
+    case S_IFIFO:
+      printf("FIFO/pipe\n");
+      break;
+    case S_IFREG:
+      printf("regular file\n");
+      break;
+    default:
+      printf("unknown?\n");
+      break;
+    }
+
+    cout << "file size:" << sb.st_size << endl;
   }
 
   Node *find(string path) override {
