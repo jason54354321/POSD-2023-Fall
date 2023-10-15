@@ -5,7 +5,6 @@
 
 class FolderOperatingSuite : public ::testing::Test {
 protected:
-  Folder *folderDocument_;
   Folder *folderMusic_;
   File *music1_;
   File *music2_;
@@ -13,8 +12,6 @@ protected:
   File *musicSubFolderMusic1_;
 
   void SetUp() override {
-    folderDocument_ = new Folder("/documents/111");
-
     folderMusic_ = new Folder("/music");
     music1_ = new File("/music/123.mp3");
     music2_ = new File("/music/456.mp3");
@@ -28,7 +25,6 @@ protected:
   }
 
   void TearDown() override {
-    delete folderDocument_;
     delete folderMusic_;
     delete music1_;
     delete music2_;
@@ -152,8 +148,15 @@ TEST_F(FolderOperatingSuite, TestDisabledIterator) {
   it->next();
   ASSERT_EQ("456.mp3", it->currentItem()->name());
 
+  // iterator being disabled here.
   Node *nodeAdded = new File("/music/999.mp3");
   folderMusic_->add(nodeAdded);
 
   ASSERT_THROW(it->next(), const char *);
+}
+
+TEST_F(FolderOperatingSuite, TestNewWithInvalidSystemPath) {
+  Folder *toAdd;
+
+  ASSERT_THROW(toAdd = new Folder("/toAdd");, const char *);
 }

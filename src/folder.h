@@ -37,7 +37,18 @@ private:
   };
 
 public:
+  void validateSystemPath(string path) {
+    struct stat sb;
+
+    const char *pathcc = path.c_str();
+    if (stat(pathcc, &sb) == -1) {
+      cout << "Error when Folder new" << endl;
+      throw "validation fail, no such file exist";
+    }
+  }
+
   Folder(string path) {
+    validateSystemPath(path);
     _path = path;
 
     // TODO: OS

@@ -12,39 +12,20 @@ class File : public Node {
 private:
   string _path;
 
+  void validateSystemPath(string path) {
+    struct stat sb;
+
+    const char *pathcc = path.c_str();
+    if (stat(pathcc, &sb) == -1) {
+      cout << "Error when File new" << endl;
+      throw "validation fail, no such file exist";
+    }
+  }
+
 public:
   File(string path) {
+    validateSystemPath(path);
     _path = path;
-    struct stat sb;
-    // TODO: link with OS
-
-    if (stat("/home/jason/test", &sb) == -1) {
-      perror("stat");
-      exit(EXIT_FAILURE);
-    }
-
-    switch (sb.st_mode & S_IFMT) {
-    case S_IFBLK:
-      printf("block device\n");
-      break;
-    case S_IFCHR:
-      printf("character device\n");
-      break;
-    case S_IFDIR:
-      printf("directory\n");
-      break;
-    case S_IFIFO:
-      printf("FIFO/pipe\n");
-      break;
-    case S_IFREG:
-      printf("regular file\n");
-      break;
-    default:
-      printf("unknown?\n");
-      break;
-    }
-
-    cout << "file size:" << sb.st_size << endl;
   }
 
   Node *find(string path) override {
