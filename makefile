@@ -1,9 +1,12 @@
 HEADER= src/node.h \
-					src/file.h \
-					src/iterator.h \
-					src/dfs_iterator.h \
-					test/ut_file.h \
-					test/ut_iterator_dfs.h \
+				src/file.h \
+				src/iterator.h \
+				src/dfs_iterator.h \
+
+TEST_HEADER= test/ut_folder.h \
+						 test/ut_folder_operation.h \
+						 test/ut_iterator_dfs.h \
+
 
 OBJECTS= iterator.o
 
@@ -26,7 +29,7 @@ endif
 # bin/main: src/main.cpp $(OBJECTS) $(HEADER)
 # 	g++ -g -std=c++14 src/main.cpp obj/* -o bin/main
 
-bin/ut_all: test/ut_all.cpp $(OBJECTS) $(HEADER)
+bin/ut_all: test/ut_all.cpp $(OBJECTS) $(HEADER) $(TEST_HEADER)
 	g++ -g -std=c++14 test/ut_all.cpp obj/* -o bin/ut_all -lgtest -lpthread
 
 $(OBJECTS): src/iterator.cpp src/iterator.h $(HEADER)
