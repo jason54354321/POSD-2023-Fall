@@ -143,3 +143,17 @@ TEST_F(FolderOperatingSuite, TestGetChildByName) {
 TEST_F(FolderOperatingSuite, TestNumberOfFiles) {
   ASSERT_EQ(3, folderMusic_->numberOfFiles());
 }
+
+TEST_F(FolderOperatingSuite, TestDisabledIterator) {
+  Iterator *it = folderMusic_->createIterator();
+
+  it->first();
+  ASSERT_EQ("123.mp3", it->currentItem()->name());
+  it->next();
+  ASSERT_EQ("456.mp3", it->currentItem()->name());
+
+  Node *nodeAdded = new File("/music/999.mp3");
+  folderMusic_->add(nodeAdded);
+
+  ASSERT_THROW(it->next(), const char *);
+}

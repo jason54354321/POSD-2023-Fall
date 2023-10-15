@@ -17,6 +17,7 @@ class Folder : public Node {
 
 protected:
   vector<Node *> _nodes;
+  vector<Iterator *> _iterators;
 
 private:
   string _path;
@@ -41,21 +42,30 @@ public:
 
     // TODO: OS
   }
+  void disableExistIterator() {
+    for (Iterator *it : _iterators) {
+      it->enable = false;
+    }
+    _iterators.clear();
+  }
 
-  void add(Node *node) override {
+  bool isPathLegit(Node *node) {
     string nodeFullPath = node->path();
 
     const regex regex("^(.*)\\/");
     smatch string_pieces;
-
     string nodeDirPath;
-    if (regex_search(nodeFullPath, string_pieces, regex)) {
-      nodeDirPath = string_pieces[1];
-    }
-    /* if (nodeDirPath == " ") { */
-    /*   nodeDirPath = "/"; */
-    /* } */
+
+    regex_search(nodeFullPath, string_pieces, regex);
     if (string_pieces[1] == _path) {
+      return true;
+    }
+    return false;
+  }
+  void add(Node *node) override {
+    disableExistIterator();
+
+    if (isPathLegit(node)) {
       _nodes.push_back(node);
     } else {
       throw "Invalid path exception";
@@ -140,8 +150,11 @@ public:
     return "Regex found no string";
   }
 
+  // Memory leak? Who's responsibility to delete?
   Iterator *createIterator() override {
-    return new FolderIterator(this);
+    Iterator *it = new FolderIterator(this);
+    _iterators.push_back(it);
+    return it;
   }
 };
 

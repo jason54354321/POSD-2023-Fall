@@ -11,6 +11,7 @@ class Folder;
 
 class Iterator {
 public:
+  bool enable = true;
   ~Iterator();
   virtual void first() = 0;
   virtual Node *currentItem() const = 0;

@@ -7,6 +7,9 @@ Folder::FolderIterator::FolderIterator(Folder *folder) : _folder(folder) {
 }
 
 void Folder::FolderIterator::first() {
+  if (!enable) {
+    throw "This iterator has been disabled";
+  }
   _it = _folder->_nodes.begin();
 }
 
@@ -19,6 +22,9 @@ bool Folder::FolderIterator::isDone() const {
 }
 
 void Folder::FolderIterator::next() {
+  if (!enable) {
+    throw "This iterator has been disabled";
+  }
   _it++;
 }
 
