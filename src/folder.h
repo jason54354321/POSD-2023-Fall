@@ -30,7 +30,7 @@ public:
     std::vector<Node *>::iterator _it;
 
   public:
-    FolderIterator(Folder *folder) : _folder(folder){};
+    FolderIterator(Folder *folder);
     void first() override;
     Node *currentItem() const override;
     void next() override;
