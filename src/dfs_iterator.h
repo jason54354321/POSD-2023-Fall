@@ -21,6 +21,9 @@ private:
 public:
   DfsIterator(Node *folder) : _folder(folder){};
 
+  ~DfsIterator() override {
+  }
+
   void first() override;
 
   Node *currentItem() const override;
@@ -40,6 +43,9 @@ private:
 
 public:
   BfsIterator(Node *folder) : _folder(folder){};
+
+  ~BfsIterator() override {
+  }
 
   void first() override;
 

@@ -32,6 +32,19 @@ public:
     _path = path;
   }
 
+  string getContext() {
+    ifstream in(_path);
+
+    stringstream buffer;
+    buffer << in.rdbuf();
+
+    string s = buffer.str();
+    if (!s.empty() && s[s.length() - 1] == '\n') {
+      s.erase(s.length() - 1);
+    }
+    return s;
+  }
+
   Node *find(string path) override {
     if (this->path() == path) {
       return this;
@@ -63,19 +76,6 @@ public:
 
   void accept(Visitor *visitor) override {
     visitor->visitFile(this);
-  }
-
-  string getContext() {
-    ifstream in(_path);
-
-    stringstream buffer;
-    buffer << in.rdbuf();
-
-    string s = buffer.str();
-    if (!s.empty() && s[s.length() - 1] == '\n') {
-      s.erase(s.length() - 1);
-    }
-    return s;
   }
 };
 

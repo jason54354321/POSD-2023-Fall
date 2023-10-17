@@ -54,12 +54,12 @@ Node *DfsIterator::currentItem() const {
   return _vec[currentIndex];
 }
 
-void DfsIterator::next() {
-  currentIndex++;
-}
-
 bool DfsIterator::isDone() const {
   return currentIndex == _vec.size();
+}
+
+void DfsIterator::next() {
+  currentIndex++;
 }
 
 void BfsIterator::first() {
@@ -91,10 +91,10 @@ Node *BfsIterator::currentItem() const {
   return _vec[currentIndex];
 }
 
-void BfsIterator::next() {
-  currentIndex++;
-}
-
 bool BfsIterator::isDone() const {
   return currentIndex == _vec.size();
+}
+
+void BfsIterator::next() {
+  currentIndex++;
 }
