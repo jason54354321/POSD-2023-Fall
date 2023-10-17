@@ -61,7 +61,7 @@ public:
   public:
     FolderIterator(Folder *folder) : _folder(folder) {
     }
-    ~FolderIterator() {
+    ~FolderIterator() override {
     }
     void first() override;
     Node *currentItem() const override;
