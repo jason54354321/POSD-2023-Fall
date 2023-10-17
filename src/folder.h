@@ -22,6 +22,7 @@ protected:
 private:
   string _path;
 
+public:
   // a inner class, client won't know the existence of this class
   class FolderIterator : public Iterator {
   private:
@@ -35,8 +36,6 @@ private:
     void next() override;
     bool isDone() const override;
   };
-
-public:
   void validateSystemPath(string path) {
     struct stat sb;
 
