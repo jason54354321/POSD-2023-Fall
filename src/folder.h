@@ -59,7 +59,8 @@ public:
     std::vector<Node *>::iterator _it;
 
   public:
-    FolderIterator(Folder *folder);
+    FolderIterator(Folder *folder) : _folder(folder) {
+    }
     ~FolderIterator() {
     }
     void first() override;
