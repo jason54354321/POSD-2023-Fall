@@ -21,21 +21,6 @@ protected:
 
 private:
   string _path;
-
-public:
-  // a inner class, client won't know the existence of this class
-  class FolderIterator : public Iterator {
-  private:
-    Folder *_folder;
-    std::vector<Node *>::iterator _it;
-
-  public:
-    FolderIterator(Folder *folder);
-    void first() override;
-    Node *currentItem() const override;
-    void next() override;
-    bool isDone() const override;
-  };
   void validateSystemPath(string path) {
     struct stat sb;
 
@@ -45,10 +30,6 @@ public:
     }
   }
 
-  Folder(string path) {
-    validateSystemPath(path);
-    _path = path;
-  }
   void disableExistIterator() {
     for (Iterator *it : _iterators) {
       it->enable = false;
@@ -69,6 +50,29 @@ public:
     }
     return false;
   }
+
+public:
+  // a inner class, client won't know the existence of this class
+  class FolderIterator : public Iterator {
+  private:
+    Folder *_folder;
+    std::vector<Node *>::iterator _it;
+
+  public:
+    FolderIterator(Folder *folder);
+    ~FolderIterator() {
+    }
+    void first() override;
+    Node *currentItem() const override;
+    void next() override;
+    bool isDone() const override;
+  };
+
+  Folder(string path) {
+    validateSystemPath(path);
+    _path = path;
+  }
+
   void add(Node *node) override {
     disableExistIterator();
 
