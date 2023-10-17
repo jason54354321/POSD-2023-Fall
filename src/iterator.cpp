@@ -65,9 +65,6 @@ bool DfsIterator::isDone() const {
   return currentIndex == _vec.size();
 }
 
-Iterator::~Iterator() {
-}
-
 void BfsIterator::first() {
   _q.push(_folder);
   bfsHelper();
