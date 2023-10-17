@@ -50,8 +50,6 @@ public:
   Folder(string path) {
     validateSystemPath(path);
     _path = path;
-
-    // TODO: OS
   }
   void disableExistIterator() {
     for (Iterator *it : _iterators) {
@@ -83,7 +81,6 @@ public:
     }
   }
 
-  // TODO: delete ptr by dfsIterator
   void remove(string path) override {
     int index = -1;
     for (Node *node : _nodes) {
