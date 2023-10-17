@@ -1,10 +1,13 @@
 #include "iterator.h"
 #include "node.h"
 #include "visitor.h"
+#include <fstream>
 #include <iostream>
 #include <regex>
+#include <sstream>
 #include <string>
 #include <sys/stat.h>
+
 #if !defined(FILE_H)
 #define FILE_H
 
@@ -60,6 +63,19 @@ public:
 
   void accept(Visitor *visitor) override {
     visitor->visitFile(this);
+  }
+
+  string getContext() {
+    ifstream in(_path);
+
+    stringstream buffer;
+    buffer << in.rdbuf();
+
+    string s = buffer.str();
+    if (!s.empty() && s[s.length() - 1] == '\n') {
+      s.erase(s.length() - 1);
+    }
+    return s;
   }
 };
 

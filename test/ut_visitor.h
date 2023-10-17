@@ -1,6 +1,7 @@
 #include "../src/file.h"
 #include "../src/find_by_name_visitor.h"
 #include "../src/folder.h"
+#include "../src/stream_out_visitor.h"
 #include <gtest/gtest.h>
 
 class VisitorSuite : public ::testing::Test {
@@ -37,27 +38,74 @@ protected:
   }
 };
 
-TEST_F(VisitorSuite, findByName123) {
+TEST_F(VisitorSuite, FindByName123) {
   Visitor *findByNameVisitor = new FindByNameVisitor("123.mp3");
 
   folderMusic_->accept(findByNameVisitor);
   list<string> pathList =
-      dynamic_cast<FindByNameVisitor *>(findByNameVisitor)->getPathList();
+      dynamic_cast<FindByNameVisitor *>(findByNameVisitor)->getPaths();
 
   ASSERT_EQ("./music/123.mp3", pathList.front());
 
   delete findByNameVisitor;
 }
 
-TEST_F(VisitorSuite, findByName999) {
+TEST_F(VisitorSuite, FindByName999) {
   Visitor *findByNameVisitor = new FindByNameVisitor("999.mp3");
 
   folderMusic_->accept(findByNameVisitor);
   list<string> pathList =
-      dynamic_cast<FindByNameVisitor *>(findByNameVisitor)->getPathList();
+      dynamic_cast<FindByNameVisitor *>(findByNameVisitor)->getPaths();
 
   ASSERT_EQ("./music/999.mp3", pathList.front());
   ASSERT_EQ("./music/sub/999.mp3", pathList.back());
 
   delete findByNameVisitor;
+}
+
+TEST_F(VisitorSuite, StreamOutOnFile) {
+  Visitor *streamOutVisitor = new StreamOutVisitor();
+  music1_->accept(streamOutVisitor);
+
+  string out = dynamic_cast<StreamOutVisitor *>(streamOutVisitor)->getResult();
+  string expectedOut = "_____________________________________________\n\
+./music/123.mp3\n\
+---------------------------------------------\n\
+hello, world\n\
+_____________________________________________\n";
+
+  ASSERT_EQ(expectedOut, out);
+}
+
+TEST_F(VisitorSuite, StreamOutOnFolder) {
+  Visitor *streamOutVisitor = new StreamOutVisitor();
+  musicSubFolder_->accept(streamOutVisitor);
+
+  string out = dynamic_cast<StreamOutVisitor *>(streamOutVisitor)->getResult();
+  string expectedOut = "_____________________________________________\n\
+./music/123.mp3\n\
+---------------------------------------------\n\
+hello, world\n\
+_____________________________________________\n\
+\n\
+_____________________________________________\n\
+./music/456.mp3\n\
+---------------------------------------------\n\
+hello, world\n\
+_____________________________________________\n\
+\n\
+_____________________________________________\n\
+./music/999.mp3\n\
+---------------------------------------------\n\
+hello, world\n\
+_____________________________________________\n\
+\n\
+_____________________________________________\n\
+./music/sub/999.mp3\n\
+---------------------------------------------\n\
+hello, world\n\
+_____________________________________________\n\
+\n";
+
+  ASSERT_EQ(expectedOut, out);
 }

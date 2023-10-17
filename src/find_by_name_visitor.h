@@ -30,7 +30,7 @@ public:
     }
   }
 
-  list<string> getPathList() {
+  list<string> getPaths() {
     return _pathList;
   }
 };
