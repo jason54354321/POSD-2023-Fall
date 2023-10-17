@@ -42,7 +42,6 @@ public:
 
     const char *pathcc = path.c_str();
     if (stat(pathcc, &sb) == -1) {
-      cout << "Error when Folder new" << endl;
       throw "validation fail, no such file exist";
     }
   }
@@ -88,6 +87,7 @@ public:
 
       if (node->path() == path) {
         _nodes.erase(_nodes.begin() + index);
+        // leak?
         /* delete node; */
         return;
       }
@@ -120,6 +120,22 @@ public:
     }
 
     return nullptr;
+  }
+
+  std::list<string> findByName(string name) override {
+    std::list<string> pathList;
+    if (this->name() == name) {
+      pathList.push_back(this->path());
+    }
+
+    for (auto it = _nodes.begin(); it != _nodes.end(); ++it) {
+      std::list<string> paths = (*it)->findByName(name);
+      for (auto i = paths.begin(); i != paths.end(); i++) {
+        pathList.push_back(*i);
+      }
+    }
+
+    return pathList;
   }
 
   bool isNullPtr(Node *node) {

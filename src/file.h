@@ -35,6 +35,14 @@ public:
     return nullptr;
   }
 
+  list<string> findByName(string name) override {
+    std::list<string> pathList;
+    if (this->name() == name) {
+      pathList.push_back(this->path());
+    }
+    return pathList;
+  }
+
   string path() const override {
     return _path;
   }

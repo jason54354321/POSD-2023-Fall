@@ -1,6 +1,7 @@
 #if !defined(NODE_H)
 #define NODE_H
 
+#include <list>
 #include <string>
 
 using namespace std;
@@ -24,6 +25,8 @@ public:
   };
 
   virtual Node *find(string path) = 0;
+
+  virtual list<string> findByName(string name) = 0;
 
   virtual int numberOfFiles() const {
     return 0;
