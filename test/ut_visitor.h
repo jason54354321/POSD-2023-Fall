@@ -79,7 +79,7 @@ _____________________________________________\n";
 
 TEST_F(VisitorSuite, StreamOutOnFolder) {
   Visitor *streamOutVisitor = new StreamOutVisitor();
-  musicSubFolder_->accept(streamOutVisitor);
+  folderMusic_->accept(streamOutVisitor);
 
   string out = dynamic_cast<StreamOutVisitor *>(streamOutVisitor)->getResult();
   string expectedOut = "_____________________________________________\n\
@@ -105,7 +105,7 @@ _____________________________________________\n\
 ---------------------------------------------\n\
 hello, world\n\
 _____________________________________________\n\
-\n";
+";
 
   ASSERT_EQ(expectedOut, out);
 }

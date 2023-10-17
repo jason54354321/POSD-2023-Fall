@@ -29,7 +29,7 @@ public:
     while (std::getline(ss, line)) {
       std::cout << line << '\n';
     }
-    _streamOut += ss.str();
+    _streamOut += ss.str() + '\n';
   }
 
   void visitFolder(Folder *folder) override {
@@ -41,6 +41,10 @@ public:
   }
 
   string getResult() {
+    // erase very last newline char
+    if (_streamOut[_streamOut.length() - 1] == '\n') {
+      _streamOut.erase(_streamOut.length() - 1);
+    }
     return _streamOut;
   }
 };
