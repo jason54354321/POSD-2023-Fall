@@ -180,6 +180,10 @@ public:
     _iterators.push_back(it);
     return it;
   }
+
+  void accept(Visitor *visitor) override {
+    visitor->visitFolder(this);
+  }
 };
 
 #endif // FOLDER

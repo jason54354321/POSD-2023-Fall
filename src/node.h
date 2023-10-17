@@ -7,6 +7,7 @@
 using namespace std;
 
 class Iterator;
+class Visitor;
 
 class Node {
 public:
@@ -35,6 +36,8 @@ public:
   virtual Iterator *createIterator() {
     return nullptr;
   };
+
+  virtual void accept(Visitor *visitor) = 0;
 
   /* Iterator * createIterator(); */
 };

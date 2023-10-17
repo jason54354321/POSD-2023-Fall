@@ -6,6 +6,7 @@ HEADER= src/node.h \
 TEST_HEADER= test/ut_folder.h \
 						 test/ut_folder_operation.h \
 						 test/ut_iterator_dfs.h \
+						 test/ut_visitor.h \
 
 
 OBJECTS= iterator.o

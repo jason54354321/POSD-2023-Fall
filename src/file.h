@@ -1,5 +1,6 @@
 #include "iterator.h"
 #include "node.h"
+#include "visitor.h"
 #include <iostream>
 #include <regex>
 #include <string>
@@ -55,6 +56,10 @@ public:
       return string_pieces[0];
     }
     return "Regex found no string";
+  }
+
+  void accept(Visitor *visitor) override {
+    visitor->visitFile(this);
   }
 };
 
