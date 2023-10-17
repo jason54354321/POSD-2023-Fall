@@ -28,9 +28,6 @@ void Folder::FolderIterator::next() {
   _it++;
 }
 
-DfsIterator::DfsIterator(Node *folder) : _folder(folder) {
-}
-
 void DfsIterator::first() {
   currentIndex = 0;
 
@@ -69,9 +66,6 @@ bool DfsIterator::isDone() const {
 }
 
 Iterator::~Iterator() {
-}
-
-BfsIterator::BfsIterator(Node *folder) : _folder(folder) {
 }
 
 void BfsIterator::first() {
