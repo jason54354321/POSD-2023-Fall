@@ -19,7 +19,7 @@ private:
   void dfsHelper(Node *folder);
 
 public:
-  DfsIterator(Node *folder);
+  DfsIterator(Node *folder) : _folder(folder){};
 
   void first() override;
 
@@ -39,7 +39,7 @@ private:
   void bfsHelper();
 
 public:
-  BfsIterator(Node *folder);
+  BfsIterator(Node *folder) : _folder(folder){};
 
   void first() override;
 
