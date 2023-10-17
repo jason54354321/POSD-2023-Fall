@@ -3,9 +3,6 @@
 #include "folder.h"
 #include "node.h"
 
-Folder::FolderIterator::FolderIterator(Folder *folder) : _folder(folder) {
-}
-
 void Folder::FolderIterator::first() {
   if (!enable) {
     throw "This iterator has been disabled";
