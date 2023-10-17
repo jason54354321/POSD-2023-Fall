@@ -12,11 +12,11 @@ protected:
   File *musicSubFolderMusic1_;
 
   void SetUp() override {
-    folderMusic_ = new Folder("/music");
-    music1_ = new File("/music/123.mp3");
-    music2_ = new File("/music/456.mp3");
-    musicSubFolder_ = new Folder("/music/sub");
-    musicSubFolderMusic1_ = new File("/music/sub/999.mp3");
+    folderMusic_ = new Folder("./music");
+    music1_ = new File("./music/123.mp3");
+    music2_ = new File("./music/456.mp3");
+    musicSubFolder_ = new Folder("./music/sub");
+    musicSubFolderMusic1_ = new File("./music/sub/999.mp3");
 
     folderMusic_->add(music1_);
     folderMusic_->add(music2_);
@@ -57,17 +57,17 @@ TEST_F(FolderOperatingSuite, TestFindCantFind) {
 }
 
 TEST_F(FolderOperatingSuite, TestFindFile) {
-  Node *node = music1_->find("/music/123.mp3");
+  Node *node = music1_->find("./music/123.mp3");
   ASSERT_EQ("123.mp3", node->name());
 
-  node = music2_->find("/music/456.mp3");
+  node = music2_->find("./music/456.mp3");
   ASSERT_EQ("456.mp3", node->name());
 }
 
 TEST_F(FolderOperatingSuite, TestFindNestedFolder) {
   Node *node;
 
-  node = folderMusic_->find("/music/sub/999.mp3");
+  node = folderMusic_->find("./music/sub/999.mp3");
   ASSERT_EQ("999.mp3", node->name());
 }
 
@@ -78,11 +78,11 @@ TEST(FolderRemoveSuite, TestRemoveFile) {
   Folder *musicSubFolder_;
   File *musicSubFolderMusic1_;
 
-  folderMusic_ = new Folder("/music");
-  music1_ = new File("/music/123.mp3");
-  music2_ = new File("/music/456.mp3");
-  musicSubFolder_ = new Folder("/music/sub");
-  musicSubFolderMusic1_ = new File("/music/sub/999.mp3");
+  folderMusic_ = new Folder("./music");
+  music1_ = new File("./music/123.mp3");
+  music2_ = new File("./music/456.mp3");
+  musicSubFolder_ = new Folder("./music/sub");
+  musicSubFolderMusic1_ = new File("./music/sub/999.mp3");
 
   folderMusic_->add(music1_);
   folderMusic_->add(music2_);
@@ -90,13 +90,13 @@ TEST(FolderRemoveSuite, TestRemoveFile) {
   musicSubFolder_->add(musicSubFolderMusic1_);
 
   // Remove
-  folderMusic_->remove("/music/123.mp3");
-  folderMusic_->remove("/music/sub/999.mp3");
+  folderMusic_->remove("./music/123.mp3");
+  folderMusic_->remove("./music/sub/999.mp3");
 
   // After
-  ASSERT_EQ(nullptr, folderMusic_->find("/music/123.mp3"));
-  ASSERT_EQ("456.mp3", folderMusic_->find("/music/456.mp3")->name());
-  ASSERT_EQ(nullptr, folderMusic_->find("/music/sub/999.mp3"));
+  ASSERT_EQ(nullptr, folderMusic_->find("./music/123.mp3"));
+  ASSERT_EQ("456.mp3", folderMusic_->find("./music/456.mp3")->name());
+  ASSERT_EQ(nullptr, folderMusic_->find("./music/sub/999.mp3"));
 
   // clear
   delete folderMusic_;
@@ -109,18 +109,18 @@ TEST(FolderRemoveSuite, TestRemoveRootFolder) {
   Folder *musicSubFolder_;
   File *musicSubFolderMusic1_;
 
-  folderMusic_ = new Folder("/music");
-  musicSubFolder_ = new Folder("/music/sub");
-  musicSubFolderMusic1_ = new File("/music/sub/999.mp3");
+  folderMusic_ = new Folder("./music");
+  musicSubFolder_ = new Folder("./music/sub");
+  musicSubFolderMusic1_ = new File("./music/sub/999.mp3");
 
   folderMusic_->add(musicSubFolder_);
   musicSubFolder_->add(musicSubFolderMusic1_);
 
   // Remove
-  folderMusic_->remove("/music/sub");
+  folderMusic_->remove("./music/sub");
 
   // After
-  ASSERT_EQ(nullptr, folderMusic_->find("/music/sub"));
+  ASSERT_EQ(nullptr, folderMusic_->find("./music/sub"));
 
   delete folderMusic_;
   delete musicSubFolderMusic1_;
@@ -149,7 +149,7 @@ TEST_F(FolderOperatingSuite, TestDisabledIterator) {
   ASSERT_EQ("456.mp3", it->currentItem()->name());
 
   // iterator being disabled here.
-  Node *nodeAdded = new File("/music/999.mp3");
+  Node *nodeAdded = new File("./music/999.mp3");
   folderMusic_->add(nodeAdded);
 
   ASSERT_THROW(it->next(), const char *);
@@ -158,5 +158,5 @@ TEST_F(FolderOperatingSuite, TestDisabledIterator) {
 TEST_F(FolderOperatingSuite, TestNewWithInvalidSystemPath) {
   Folder *toAdd;
 
-  ASSERT_THROW(toAdd = new Folder("/toAdd");, const char *);
+  ASSERT_THROW(toAdd = new Folder("./toAdd");, const char *);
 }

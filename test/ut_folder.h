@@ -12,13 +12,13 @@ protected:
   File *musicSubFolderMusic1_;
 
   void SetUp() override {
-    folderDocument_ = new Folder("/documents");
+    folderDocument_ = new Folder("./documents");
 
-    folderMusic_ = new Folder("/music");
-    music1_ = new File("/music/123.mp3");
-    music2_ = new File("/music/456.mp3");
-    musicSubFolder_ = new Folder("/music/sub");
-    musicSubFolderMusic1_ = new File("/music/sub/999.mp3");
+    folderMusic_ = new Folder("./music");
+    music1_ = new File("./music/123.mp3");
+    music2_ = new File("./music/456.mp3");
+    musicSubFolder_ = new Folder("./music/sub");
+    musicSubFolderMusic1_ = new File("./music/sub/999.mp3");
 
     folderMusic_->add(music1_);
     folderMusic_->add(music2_);
@@ -37,8 +37,8 @@ protected:
 };
 
 TEST_F(FolderBasicSuite, TestFolderPath) {
-  ASSERT_EQ("/documents", folderDocument_->path());
-  ASSERT_EQ("/music", folderMusic_->path());
+  ASSERT_EQ("./documents", folderDocument_->path());
+  ASSERT_EQ("./music", folderMusic_->path());
 }
 
 TEST_F(FolderBasicSuite, TestFolderName) {
