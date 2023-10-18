@@ -40,18 +40,34 @@ protected:
 public:
   class FolderIterator : public Iterator {
   public:
-    FolderIterator(Folder *composite);
+    FolderIterator(Folder *composite) : _host(composite) {
+    }
     ~FolderIterator() override {
     }
-    void first() override;
-    Node *currentItem() const override;
-    void next() override;
-    bool isDone() const override;
+    void first() override {
+      if (!iterator_enable) {
+        throw "This iterator has been disabled";
+      }
+      _current = _host->_nodes.begin();
+    }
+    Node *currentItem() const override {
+      return *_current;
+    }
+    void next() override {
+      if (!iterator_enable) {
+        throw "This iterator has been disabled";
+      }
+      _current++;
+    }
+    bool isDone() const override {
+      return _current == _host->_nodes.end();
+    }
 
   private:
     Folder *const _host;
     std::list<Node *>::iterator _current;
   };
+
   Folder(string path) : Node(path) {
     validateSystemPath(path);
   }
