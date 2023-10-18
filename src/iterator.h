@@ -1,17 +1,18 @@
-#if !defined(ITERATOR_H)
-#define ITERATOR_H
-
-#include "node.h"
-#include <list>
-#include <vector>
-
 #pragma once
 
+#include <list>
+
+class Node;
 class Folder;
 
 class Iterator {
+protected:
+  bool iterator_enable = true;
+
 public:
-  bool enable = true;
+  void setEnable(bool enable) {
+    iterator_enable = enable;
+  }
   virtual ~Iterator() {
   }
   virtual void first() {
@@ -25,5 +26,3 @@ public:
     return true;
   }
 };
-
-#endif // ITERATOR_H

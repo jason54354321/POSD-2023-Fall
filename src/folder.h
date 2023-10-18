@@ -1,126 +1,121 @@
-#if !defined(FOLDER)
-#define FOLDER
+#pragma once
 
-#include "file.h"
+#include "dfs_iterator.h"
 #include "iterator.h"
 #include "node.h"
 #include <iostream>
-#include <regex>
-#include <string>
+#include <list>
+#include <sys/stat.h>
 #include <vector>
 
-class Folder : public Node {
-  friend class DfsIterator;
-  friend class BfsIterator;
+using namespace std;
 
-protected:
-  vector<Node *> _nodes;
-  vector<Iterator *> _iterators;
+class Folder : public Node {
+  friend class FolderIterator;
 
 private:
-  string _path;
+  list<Node *> _nodes;
+  vector<Iterator *> _iterators;
+
   void validateSystemPath(string path) {
     struct stat sb;
 
     const char *pathcc = path.c_str();
     if (stat(pathcc, &sb) == -1) {
+      cout << "Error when File new" << endl;
       throw "validation fail, no such file exist";
     }
   }
 
   void disableExistIterator() {
     for (Iterator *it : _iterators) {
-      it->enable = false;
+      it->setEnable(false);
     }
     _iterators.clear();
   }
 
-  bool isPathLegit(Node *node) {
-    string nodeFullPath = node->path();
-
-    const regex regex("^(.*)\\/");
-    smatch string_pieces;
-    string nodeDirPath;
-
-    regex_search(nodeFullPath, string_pieces, regex);
-    if (string_pieces[1] == _path) {
-      return true;
-    }
-    return false;
+protected:
+  void removeChild(Node *target) {
+    _nodes.remove(target);
   }
 
 public:
-  // a inner class, client won't know the existence of this class
   class FolderIterator : public Iterator {
-  private:
-    Folder *_folder;
-    std::vector<Node *>::iterator _it;
-
   public:
-    FolderIterator(Folder *folder) : _folder(folder) {
+    FolderIterator(Folder *composite);
+    ~FolderIterator() {
     }
-    ~FolderIterator() override {
-    }
-    void first() override;
-    Node *currentItem() const override;
-    void next() override;
-    bool isDone() const override;
-  };
+    void first();
+    Node *currentItem() const;
+    void next();
+    bool isDone() const;
 
-  Folder(string path) {
+  private:
+    Folder *const _host;
+    std::list<Node *>::iterator _current;
+  };
+  Folder(string path) : Node(path) {
     validateSystemPath(path);
-    _path = path;
   }
 
-  void add(Node *node) override {
+  void add(Node *node) {
     disableExistIterator();
 
-    if (isPathLegit(node)) {
-      _nodes.push_back(node);
-    } else {
-      throw "Invalid path exception";
+    if (node->path() != this->path() + "/" + node->name()) {
+      throw string("Incorrect path of node: " + node->path());
     }
+    _nodes.push_back(node);
+    node->parent(this);
   }
 
-  void remove(string path) override {
-    int index = -1;
-    for (Node *node : _nodes) {
-      index++;
-
-      if (node->path() == path) {
-        _nodes.erase(_nodes.begin() + index);
-        // leak?
-        /* delete node; */
-        return;
-      }
-
-      Folder *folder = dynamic_cast<class Folder *>(node);
-      if (folder) {
-        folder->remove(path);
-      }
-    }
-  }
-
-  Node *getChildByName(const char *name) const override {
-    for (Node *node : _nodes) {
-      if (node->name() == name) {
-        return node;
+  Node *getChildByName(const char *name) const {
+    for (auto it = _nodes.begin(); it != _nodes.end(); ++it) {
+      if ((*it)->name() == name) {
+        return *it;
       }
     }
     return nullptr;
   }
 
-  Node *find(string path) override {
+  int numberOfFiles() const {
+    int num = 0;
+    if (_nodes.size() == 0) {
+      return 0;
+    }
+    for (auto it = _nodes.begin(); it != _nodes.end(); ++it) {
+      num += (*it)->numberOfFiles();
+    }
+    return num;
+  }
+
+  Iterator *createIterator() {
+    Iterator *it = new FolderIterator(this);
+    _iterators.push_back(it);
+
+    return it;
+  }
+
+  Iterator *dfsIterator() {
+    return new DfsIterator(this);
+  }
+
+  Node *find(string path) {
     if (this->path() == path) {
       return this;
     }
 
-    for (Node *node : _nodes) {
-      if (!isNullPtr(node->find(path))) {
-        return node->find(path);
-      }
+    size_t index = path.find(this->path());
+
+    if (string::npos == index) {
+      return nullptr;
     }
 
+    for (auto it = _nodes.begin(); it != _nodes.end(); ++it) {
+      Node *result = (*it)->find(path);
+      if (result) {
+        return result;
+      }
+    }
     return nullptr;
   }
 
@@ -140,52 +135,14 @@ public:
     return pathList;
   }
 
-  bool isNullPtr(Node *node) {
-    return node == nullptr;
-  }
-
-  int numberOfFiles() const override {
-    int output = 0;
-    for (Node *node : _nodes) {
-      File *file = dynamic_cast<File *>(node);
-
-      if (file) {
-        output++;
-      }
-
-      Folder *folder = dynamic_cast<class Folder *>(node);
-      if (folder) {
-        output += folder->numberOfFiles();
-      }
+  void remove(string path) {
+    Node *target = find(path);
+    if (target) {
+      target->parent()->removeChild(target);
     }
-
-    return output;
-  }
-
-  string path() const override {
-    return _path;
-  }
-
-  string name() const override {
-    const regex regex("[^\\/]+$");
-    smatch string_pieces;
-
-    if (regex_search(_path, string_pieces, regex)) {
-      return string_pieces[0];
-    }
-    return "Regex found no string";
-  }
-
-  // Memory leak? Who's responsibility to delete?
-  Iterator *createIterator() override {
-    Iterator *it = new FolderIterator(this);
-    _iterators.push_back(it);
-    return it;
   }
 
   void accept(Visitor *visitor) override {
     visitor->visitFolder(this);
   }
 };
-
-#endif // FOLDER

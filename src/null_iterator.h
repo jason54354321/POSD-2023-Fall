@@ -1,7 +1,10 @@
-#if !defined(NULL_ITERATOR_H)
-#define NULL_ITERATOR_H
+#pragma once 
+
+#include "iterator.h"
 
 class NullIterator : public Iterator {
+public:
+    bool isDone () const override {
+        return true;
+    }
 };
-
-#endif // NULL_ITERATOR_H

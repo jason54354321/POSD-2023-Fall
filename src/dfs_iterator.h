@@ -1,59 +1,85 @@
-#include "folder.h"
+#pragma once
+
+#include <list>
+#include <stack>
+
 #include "iterator.h"
 #include "node.h"
-#include <queue>
-#include <stack>
-#include <vector>
-
-#if !defined(DFS_ITERATOR_H)
-#define DFS_ITERATOR_H
-
-using namespace std;
 
 class DfsIterator : public Iterator {
-private:
-  Node *_folder;
-  vector<Node *> _vec;
-  int currentIndex = 0;
-
-  void dfsHelper(Node *folder);
-
 public:
-  DfsIterator(Node *folder) : _folder(folder){};
+  DfsIterator(Node *composite) : _root(composite) {}
 
-  ~DfsIterator() override {
+  void first() {
+    while (!_stack.empty()) {
+      _stack.pop();
+    }
+
+    _curr = _root;
+    _pushCurrIter();
+    next();
   }
 
-  void first() override;
+  Node *currentItem() const { return _curr; }
 
-  Node *currentItem() const override;
+  void next() {
+    while (!_stack.empty() && _stack.top()->isDone()) {
+      _stack.pop();
+    }
+    if (_stack.empty()) {
+      return;
+    }
+    if (!_stack.top()->isDone()) {
+      _curr = _stack.top()->currentItem();
+      _stack.top()->next();
+      _pushCurrIter();
+    }
+  }
 
-  void next() override;
+  bool isDone() const { return _stack.empty(); }
 
-  bool isDone() const override;
+private:
+  Node *_root;
+  Node *_curr;
+  std::stack<Iterator *> _stack;
+
+  void _pushCurrIter() {
+    Iterator *it = _curr->createIterator();
+    it->first();
+    _stack.push(it);
+  }
 };
 
 class BfsIterator : public Iterator {
-private:
-  Node *_folder;
-  vector<Node *> _vec;
-  queue<Node *> _q;
-  int currentIndex = 0;
-  void bfsHelper();
-
 public:
-  BfsIterator(Node *folder) : _folder(folder){};
+  BfsIterator(Node *composite) : _root(composite) {}
 
-  ~BfsIterator() override {
+  void first() {
+    if (!_nextLevel.empty())
+      _nextLevel.clear();
+
+    _curr = _root;
+    _nextLevel.push_back(_curr);
+    next();
   }
 
-  void first() override;
+  Node *currentItem() const { return _curr; }
 
-  Node *currentItem() const override;
+  void next() {
+    Iterator *it = _curr->createIterator();
+    for (it->first(); !it->isDone(); it->next()) {
+      _nextLevel.push_back(it->currentItem());
+    }
 
-  void next() override;
+    _nextLevel.pop_front();
+    _curr = _nextLevel.front();
+    return;
+  }
 
-  bool isDone() const override;
+  bool isDone() const { return _nextLevel.empty(); }
+
+private:
+  Node *_root;
+  Node *_curr;
+  std::list<Node *> _nextLevel;
 };
-
-#endif // DFS_ITERATOR_H

@@ -1,27 +1,40 @@
 #pragma once
 
-#include "./file.h"
-#include "./folder.h"
-#include "./visitor.h"
+#include "file.h"
+#include "folder.h"
 #include "iterator.h"
+#include "visitor.h"
+#include <fstream>
+#include <iostream>
 #include <sstream>
-#include <string>
+
+using namespace std;
 
 class StreamOutVisitor : public Visitor {
 private:
   string _streamOut;
 
-public:
-  StreamOutVisitor() {
+  string getContext(File *file) {
+    ifstream in(file->path());
+
+    stringstream buffer;
+    buffer << in.rdbuf();
+
+    string s = buffer.str();
+    if (!s.empty() && s[s.length() - 1] == '\n') {
+      s.erase(s.length() - 1);
+    }
+    return s;
   }
 
+public:
   void visitFile(File *file) override {
     // build
     stringstream ss;
     ss << "_____________________________________________" << endl;
     ss << file->path() << endl;
     ss << "---------------------------------------------" << endl;
-    ss << file->getContext() << endl;
+    ss << getContext(file) << endl;
     ss << "_____________________________________________" << endl;
 
     string line;
@@ -40,11 +53,12 @@ public:
     }
   }
 
-  string getResult() {
+  string getResult() const {
+    string holder = _streamOut;
     // erase very last newline char
-    if (_streamOut[_streamOut.length() - 1] == '\n') {
-      _streamOut.erase(_streamOut.length() - 1);
+    if (holder[holder.length() - 1] == '\n') {
+      holder.erase(holder.length() - 1);
     }
-    return _streamOut;
+    return holder;
   }
 };

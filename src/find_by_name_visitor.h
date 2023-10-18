@@ -1,11 +1,9 @@
 #pragma once
 
-#include "./file.h"
-#include "./folder.h"
-#include "./visitor.h"
+#include "file.h"
+#include "folder.h"
 #include "iterator.h"
-#include "list"
-#include "string"
+#include "visitor.h"
 
 class FindByNameVisitor : public Visitor {
 private:
@@ -13,8 +11,7 @@ private:
   list<string> _pathList;
 
 public:
-  FindByNameVisitor(string name) : _name(name) {
-  }
+  FindByNameVisitor(string name) : _name(name) {}
 
   void visitFile(File *file) override {
     if (file->name() == _name) {
@@ -30,7 +27,5 @@ public:
     }
   }
 
-  list<string> getPaths() const {
-    return _pathList;
-  }
+  std::list<string> getPaths() const { return _pathList; }
 };

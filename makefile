@@ -1,49 +1,27 @@
-HEADER= src/node.h \
-				src/file.h \
-				src/iterator.h \
-				src/dfs_iterator.h \
+.PHONY: clean dirs
 
-TEST_HEADER= test/ut_folder.h \
+UT_ALL = test/ut_all.cpp
+TEST_HEADERS= test/ut_folder.h \
 						 test/ut_folder_operation.h \
 						 test/ut_iterator_dfs.h \
 						 test/ut_visitor.h \
 
 
-OBJECTS= iterator.o
+SRC_HEADERS = src/file.h src/folder.h src/node.h src/iterator.h src/null_iterator.h src/dfs_iterator.h src/visitor.h src/find_by_name_visitor.h src/stream_out_visitor.h
 
-.PHONY: directories clean stat
+ITERATOR_OBJ = obj/iterator.o
+ITERATOR_SRC = src/iterator.cpp src/iterator.h
 
-# Leading in ifeq must be "Space" instead of tab
-ifeq ($(OS),Windows_NT)
-  $(info "THIS IS")
-  $(info $(OS))
-  SHELL := powershell.exe
-  .SHELLFLAGS := -NoProfile -Command
-  
-  all: bin/ut_all
-else
-  all: directories bin/ut_all
-endif
+all: dirs bin/ut_all
 
+bin/ut_all: $(UT_ALL) $(TEST_HEADERS) $(SRC_HEADERS) $(ITERATOR_OBJ)
+	g++  -std=c++11 -Wfatal-errors -Wall -o bin/ut_all $(UT_ALL) $(ITERATOR_OBJ) -lgtest -lpthread
 
-
-# bin/main: src/main.cpp $(OBJECTS) $(HEADER)
-# 	g++ -g -std=c++14 src/main.cpp obj/* -o bin/main
-
-bin/ut_all: test/ut_all.cpp $(OBJECTS) $(HEADER) $(TEST_HEADER)
-	g++ -g -std=c++14 test/ut_all.cpp obj/* -o bin/ut_all -lgtest -lpthread
-
-$(OBJECTS): src/iterator.cpp src/iterator.h $(HEADER)
-	g++ -g -std=c++14 -c src/iterator.cpp -o obj/iterator.o
-
-directories:
-	mkdir -p bin
-	mkdir -p obj
+$(ITERATOR_OBJ): $(ITERATOR_SRC)
+	g++  -std=c++11 -Wfatal-errors -Wall -c $< -o $@
 
 clean:
-	rm -f bin/*
-	rm -f obj/*
+	rm -rf bin obj
 
-stat:
-	wc src/* test/*
-
+dirs:
+	mkdir -p bin obj
