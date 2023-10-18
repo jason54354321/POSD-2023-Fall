@@ -42,7 +42,7 @@ public:
     while (std::getline(ss, line)) {
       std::cout << line << '\n';
     }
-    _streamOut += ss.str() + '\n';
+    _streamOut += ss.str();
   }
 
   void visitFolder(Folder *folder) override {
@@ -50,10 +50,10 @@ public:
     for (it->first(); !it->isDone(); it->next()) {
       Node *node = it->currentItem();
       node->accept(this);
-      /* File *file = dynamic_cast<File *>(node); */
-      /* if (file) { */
-      /*   _streamOut += "\n"; */
-      /* } */
+      File *file = dynamic_cast<File *>(node);
+      if (file) {
+        _streamOut += "\n";
+      }
     }
   }
 
