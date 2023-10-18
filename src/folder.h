@@ -11,8 +11,6 @@
 using namespace std;
 
 class Folder : public Node {
-  friend class FolderIterator;
-
 private:
   list<Node *> _nodes;
   vector<Iterator *> _iterators;
@@ -43,12 +41,12 @@ public:
   class FolderIterator : public Iterator {
   public:
     FolderIterator(Folder *composite);
-    ~FolderIterator() {
+    ~FolderIterator() override {
     }
-    void first();
-    Node *currentItem() const;
-    void next();
-    bool isDone() const;
+    void first() override;
+    Node *currentItem() const override;
+    void next() override;
+    bool isDone() const override;
 
   private:
     Folder *const _host;

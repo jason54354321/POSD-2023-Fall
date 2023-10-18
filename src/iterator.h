@@ -10,7 +10,7 @@ protected:
   bool iterator_enable = true;
 
 public:
-  void setEnable(bool enable) {
+  virtual void setEnable(bool enable) {
     iterator_enable = enable;
   }
   virtual ~Iterator() {
