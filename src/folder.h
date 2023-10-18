@@ -9,8 +9,6 @@
 #include <string>
 #include <vector>
 
-class Folder;
-
 class Folder : public Node {
   friend class DfsIterator;
   friend class BfsIterator;
