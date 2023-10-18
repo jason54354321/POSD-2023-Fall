@@ -50,6 +50,10 @@ public:
     for (it->first(); !it->isDone(); it->next()) {
       Node *node = it->currentItem();
       node->accept(this);
+      /* File *file = dynamic_cast<File *>(node); */
+      /* if (file) { */
+      /*   _streamOut += "\n"; */
+      /* } */
     }
   }
 
