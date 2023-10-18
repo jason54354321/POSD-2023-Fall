@@ -23,6 +23,12 @@ private:
       cout << "Error when File new" << endl;
       throw "validation fail, no such file exist";
     }
+
+    string filetype;
+    if ((sb.st_mode & S_IFMT) != S_IFDIR) {
+      cout << "Error when File new" << endl;
+      throw "validation fail, no such file exist";
+    }
   }
 
   void disableExistIterator() {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "node.h"
+#include <iostream>
 #include <sys/stat.h>
 
 class File : public Node {
@@ -10,14 +11,25 @@ private:
 
     const char *pathcc = path.c_str();
     if (stat(pathcc, &sb) == -1) {
+      cout << "Error when File new" << endl;
+      throw "validation fail, no such file exist";
+    }
+
+    string filetype;
+    if ((sb.st_mode & S_IFMT) != S_IFREG) {
+      cout << "Error when File new" << endl;
       throw "validation fail, no such file exist";
     }
   }
 
 public:
-  File(string path) : Node(path) { validateSystemPath(path); }
+  File(string path) : Node(path) {
+    validateSystemPath(path);
+  }
 
-  int numberOfFiles() const { return 1; }
+  int numberOfFiles() const {
+    return 1;
+  }
 
   Node *find(string path) {
     if (this->path() == path) {
@@ -34,5 +46,7 @@ public:
     return pathList;
   }
 
-  void accept(Visitor *visitor) override { visitor->visitFile(this); }
+  void accept(Visitor *visitor) override {
+    visitor->visitFile(this);
+  }
 };

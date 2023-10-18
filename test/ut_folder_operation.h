@@ -179,6 +179,26 @@ TEST_F(FolderOperatingSuite, TestNewWithInvalidSystemPath) {
   FAIL();
 }
 
+TEST_F(FolderOperatingSuite, FolderButWithFilePath) {
+  try {
+    Folder *folder = new Folder("./music/123.mp3");
+  } catch (const char *e) {
+    ASSERT_EQ("validation fail, no such file exist", e);
+    return;
+  }
+  FAIL();
+}
+
+TEST_F(FolderOperatingSuite, FileButWithFolderPath) {
+  try {
+    File *folder = new File("./music");
+  } catch (const char *e) {
+    ASSERT_EQ("validation fail, no such file exist", e);
+    return;
+  }
+  FAIL();
+}
+
 TEST_F(FolderOperatingSuite, findByName) {
   list<string> pathList = folderMusic_->findByName("999.mp3");
   ASSERT_EQ("./music/999.mp3", pathList.front());
