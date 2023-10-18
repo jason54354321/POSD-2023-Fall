@@ -55,10 +55,10 @@ public:
 
   string getResult() const {
     string holder = _streamOut;
-    // erase very last newline char
-    if (holder[holder.length() - 1] == '\n') {
-      holder.erase(holder.length() - 1);
-    }
+    /* // erase very last newline char */
+    /* if (holder[holder.length() - 1] == '\n') { */
+    /*   holder.erase(holder.length() - 1); */
+    /* } */
     return holder;
   }
 };
