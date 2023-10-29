@@ -2,30 +2,38 @@
 
 #include "file.h"
 #include "folder.h"
-#include "iterator.h"
 #include "visitor.h"
 
 class FindByNameVisitor : public Visitor {
-private:
-  string _name;
-  list<string> _pathList;
-
 public:
-  FindByNameVisitor(string name) : _name(name) {}
+    FindByNameVisitor(string name) : _name(name) {}
 
-  void visitFile(File *file) override {
-    if (file->name() == _name) {
-      _pathList.push_back(file->path());
+    void visitFile(File * file) override {
+        if (file->name() == _name) {
+            _paths.push_back(file->path());
+        }
     }
-  }
 
-  void visitFolder(Folder *folder) override {
-    Iterator *it = folder->createIterator();
-    for (it->first(); !it->isDone(); it->next()) {
-      Node *node = it->currentItem();
-      node->accept(this);
+    void visitFolder(Folder * folder) override {
+        if (folder->name() == _name) {
+            _paths.push_back(folder->path());
+        }
+
+        Iterator * it = folder->createIterator();
+
+        it->first();
+        for (; !it->isDone(); it->next()) {
+            it->currentItem()->accept(this);
+        }
+
+        delete it;
     }
-  }
 
-  std::list<string> getPaths() const { return _pathList; }
+    std::list<string> getPaths() const {
+        return _paths;
+    }
+
+private:
+    string _name;
+    std::list<string> _paths;
 };

@@ -1,54 +1,42 @@
-#include "../src/file.h"
+#include <string>
 #include "../src/folder.h"
-#include <gtest/gtest.h>
 
-class FolderBasicSuite : public ::testing::Test {
-protected:
-  Folder *folderDocument_;
-  File *document1_;
-  Folder *folderMusic_;
-  File *music1_;
-  File *music2_;
-  Folder *musicSubFolder_;
-  File *musicSubFolderMusic1_;
+using namespace std;
 
-  void SetUp() override {
-    folderDocument_ = new Folder("./documents");
-    document1_ = new File("./documents/123.pdf");
+TEST(Folder, normal) {
+    Folder home("structure/home");
 
-    folderMusic_ = new Folder("./music");
-    music1_ = new File("./music/123.mp3");
-    music2_ = new File("./music/456.mp3");
-    musicSubFolder_ = new Folder("./music/sub");
-    musicSubFolderMusic1_ = new File("./music/sub/999.mp3");
-
-    folderMusic_->add(music1_);
-    folderMusic_->add(music2_);
-    folderMusic_->add(musicSubFolder_);
-    musicSubFolder_->add(musicSubFolderMusic1_);
-  }
-
-  void TearDown() override {
-    delete folderDocument_;
-    delete document1_;
-    delete folderMusic_;
-    delete music1_;
-    delete music2_;
-    delete musicSubFolder_;
-    delete musicSubFolderMusic1_;
-  }
-};
-
-TEST_F(FolderBasicSuite, TestFolderPath) {
-  ASSERT_EQ("./documents", folderDocument_->path());
-  ASSERT_EQ("./documents/123.pdf", document1_->path());
-  ASSERT_EQ("./music", folderMusic_->path());
-  ASSERT_EQ("./music/sub/999.mp3", musicSubFolderMusic1_->path());
+    ASSERT_EQ("home", home.name());
+    ASSERT_EQ("structure/home", home.path());
 }
 
-TEST_F(FolderBasicSuite, TestFolderName) {
-  ASSERT_EQ("documents", folderDocument_->name());
-  ASSERT_EQ("123.pdf", document1_->name());
-  ASSERT_EQ("music", folderMusic_->name());
-  ASSERT_EQ("999.mp3", musicSubFolderMusic1_->name());
+TEST(Folder, invalid_folder) {
+    ASSERT_ANY_THROW(Folder("/NOT/EXIST/PATH"));
+}
+
+TEST(Folder, invalid_folder_2) {
+    ASSERT_ANY_THROW(Folder("structure/home/Documents/hello.txt"));
+}
+
+TEST(Folder, add_file) {
+    Folder home("structure/home");
+    File hello("structure/home/hello.txt");
+    home.add(&hello);
+
+    ASSERT_EQ("hello.txt", home.getChildByName("hello.txt")->name());
+}
+
+TEST(Folder, add_incorrect_path_file_to_folder) {
+    Folder home("structure/home");
+    File hello("structure/home/Documents/hello.txt");
+    ASSERT_ANY_THROW(home.add(&hello));
+}
+
+TEST(Folder, add_folder) {
+    Folder home("structure/home");
+    Folder document("structure/home/Documents");
+
+    home.add(&document);
+
+    ASSERT_EQ("Documents", home.getChildByName("Documents")->name());
 }

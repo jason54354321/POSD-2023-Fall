@@ -1,111 +1,193 @@
-#include "../src/file.h"
-#include "../src/find_by_name_visitor.h"
+#include "../src/node.h"
 #include "../src/folder.h"
+#include "../src/file.h"
+#include "../src/visitor.h"
+#include "../src/find_by_name_visitor.h"
 #include "../src/stream_out_visitor.h"
-#include <gtest/gtest.h>
 
-class VisitorSuite : public ::testing::Test {
+class VisitorTest: public ::testing::Test {
 protected:
-  Folder *folderMusic_;
-  File *music1_;
-  File *music2_;
-  File *music3_;
-  Folder *musicSubFolder_;
-  File *musicSubFolderMusic1_;
+    virtual void SetUp() {
+        home = new Folder("structure/home");
 
-  void SetUp() override {
-    folderMusic_ = new Folder("./music");
-    music1_ = new File("./music/123.mp3");
-    music2_ = new File("./music/456.mp3");
-    music3_ = new File("./music/999.mp3");
-    musicSubFolder_ = new Folder("./music/sub");
-    musicSubFolderMusic1_ = new File("./music/sub/999.mp3");
+        profile = new File("structure/home/my_profile");
+        home->add(profile);
 
-    folderMusic_->add(music1_);
-    folderMusic_->add(music2_);
-    folderMusic_->add(music3_);
-    folderMusic_->add(musicSubFolder_);
-    musicSubFolder_->add(musicSubFolderMusic1_);
-  }
+        hello1 = new File("structure/home/hello.txt");
+        home->add(hello1);
 
-  void TearDown() override {
-    delete folderMusic_;
-    delete music1_;
-    delete music2_;
-    delete music3_;
-    delete musicSubFolder_;
-    delete musicSubFolderMusic1_;
-  }
+        document = new Folder("structure/home/Documents");
+        home->add(document);
+
+        favorite = new Folder("structure/home/Documents/favorites");
+        document->add(favorite);
+        ddd = new File("structure/home/Documents/favorites/domain-driven-design.pdf");
+        favorite->add(ddd);
+        ca = new File("structure/home/Documents/favorites/clean-architecture.pdf");
+        favorite->add(ca);
+        cqrs = new File("structure/home/Documents/favorites/cqrs.pdf");
+        favorite->add(cqrs);
+
+        note = new File("structure/home/Documents/note.txt");
+        document->add(note);
+
+        hello2 = new File("structure/home/hello.txt");
+        home->add(hello2);
+
+        download = new Folder("structure/home/Downloads");
+        home->add(download);
+
+        funny = new File("structure/home/Downloads/funny.png");
+        download->add(funny);
+
+        visitor_folder = new Folder("structure/visitor");
+        file1 = new File("structure/visitor/file1.txt");
+        visitor_folder->add(file1);
+        file2 = new File("structure/visitor/file2.txt");
+        visitor_folder->add(file2);
+        nested = new Folder("structure/visitor/nested");
+        visitor_folder->add(nested);
+        file3 = new File("structure/visitor/nested/file3.txt");
+        nested->add(file3);
+        file4 = new File("structure/visitor/nested/file4.txt");
+        nested->add(file4);
+    }
+
+    void TearDown() {
+        delete home;
+        delete profile;
+        delete download;
+        delete document;
+        delete note;
+        delete favorite;
+        delete ddd;
+        delete ca;
+        delete cqrs;
+        delete funny;
+        delete hello1;
+        delete hello2;
+        delete visitor_folder;
+        delete file1;
+        delete file2;
+        delete nested;
+        delete file3;
+        delete file4;
+    }
+    
+    Node * home;
+    Node * profile;
+    Node * download;
+    Node * document;
+    Node * note;
+    Node * favorite;
+    Node * ddd;
+    Node * ca;
+    Node * cqrs;
+    Node * funny;
+    Node * hello1;
+    Node * hello2;
+
+    Node * visitor_folder;
+    Node * file1;
+    Node * file2;
+    Node * nested;
+    Node * file3;
+    Node * file4;
 };
 
-TEST_F(VisitorSuite, FindByName123) {
-  Visitor *findByNameVisitor = new FindByNameVisitor("123.mp3");
+TEST_F(VisitorTest, findNormal) {
+    FindByNameVisitor * visitor = new FindByNameVisitor("clean-architecture.pdf");
 
-  folderMusic_->accept(findByNameVisitor);
-  list<string> pathList =
-      dynamic_cast<FindByNameVisitor *>(findByNameVisitor)->getPaths();
+    home->accept(visitor);
 
-  ASSERT_EQ("./music/123.mp3", pathList.front());
-
-  delete findByNameVisitor;
+    ASSERT_EQ(1, visitor->getPaths().size());
+    ASSERT_EQ(ca->path(), visitor->getPaths().begin().operator*());
 }
 
-TEST_F(VisitorSuite, FindByName999) {
-  Visitor *findByNameVisitor = new FindByNameVisitor("999.mp3");
+TEST_F(VisitorTest, findMany) {
+    FindByNameVisitor * visitor = new FindByNameVisitor("hello.txt");
 
-  folderMusic_->accept(findByNameVisitor);
-  list<string> pathList =
-      dynamic_cast<FindByNameVisitor *>(findByNameVisitor)->getPaths();
+    home->accept(visitor);
 
-  ASSERT_EQ("./music/999.mp3", pathList.front());
-  ASSERT_EQ("./music/sub/999.mp3", pathList.back());
-
-  delete findByNameVisitor;
+    ASSERT_EQ(2, visitor->getPaths().size());
 }
 
-TEST_F(VisitorSuite, StreamOutOnFile) {
-  Visitor *streamOutVisitor = new StreamOutVisitor();
-  music1_->accept(streamOutVisitor);
+TEST_F(VisitorTest, findNothing) {
+    FindByNameVisitor * visitor = new FindByNameVisitor("nothing-to_find");
 
-  string out = dynamic_cast<StreamOutVisitor *>(streamOutVisitor)->getResult();
-  string expectedOut = "_____________________________________________\n\
-./music/123.mp3\n\
----------------------------------------------\n\
-hello, world\n\
-_____________________________________________\n";
+    home->accept(visitor);
 
-  ASSERT_EQ(expectedOut, out);
+    ASSERT_EQ(0, visitor->getPaths().size());
 }
 
-TEST_F(VisitorSuite, StreamOutOnFolder) {
-  Visitor *streamOutVisitor = new StreamOutVisitor();
-  folderMusic_->accept(streamOutVisitor);
+TEST_F(VisitorTest, streamOutFile) {
+    StreamOutVisitor * visitor = new StreamOutVisitor();
 
-  string out = dynamic_cast<StreamOutVisitor *>(streamOutVisitor)->getResult();
-  string expectedOut = "_____________________________________________\n\
-./music/123.mp3\n\
----------------------------------------------\n\
-hello, world\n\
-_____________________________________________\n\
-\n\
-_____________________________________________\n\
-./music/456.mp3\n\
----------------------------------------------\n\
-hello, world\n\
-_____________________________________________\n\
-\n\
-_____________________________________________\n\
-./music/999.mp3\n\
----------------------------------------------\n\
-hello, world\n\
-_____________________________________________\n\
-\n\
-_____________________________________________\n\
-./music/sub/999.mp3\n\
----------------------------------------------\n\
-hello, world\n\
-_____________________________________________\n\
-\n";
+    profile->accept(visitor);
 
-  ASSERT_EQ(expectedOut, out);
+    string expected;
+    expected += "_____________________________________________\n";
+    expected += "structure/home/my_profile\n";
+    expected += "---------------------------------------------\n";
+    expected += "Profile\n";
+    expected += "Name: name\n";
+    expected += "_____________________________________________\n";
+
+    ASSERT_EQ(expected, visitor->getResult());
+}
+
+TEST_F(VisitorTest, streamOutFolder) {
+    StreamOutVisitor * visitor = new StreamOutVisitor();
+
+    nested->accept(visitor);
+
+    string expected;
+    expected += "_____________________________________________\n";
+    expected += "structure/visitor/nested/file3.txt\n";
+    expected += "---------------------------------------------\n";
+    expected += "I am file 3\n";
+    expected += "_____________________________________________\n";
+    expected += "\n";
+    expected += "_____________________________________________\n";
+    expected += "structure/visitor/nested/file4.txt\n";
+    expected += "---------------------------------------------\n";
+    expected += "I am file 4\n";
+    expected += "_____________________________________________\n";
+    expected += "\n";
+
+    ASSERT_EQ(expected, visitor->getResult());
+}
+
+TEST_F(VisitorTest, streamOutNestedFolder) {
+    StreamOutVisitor * visitor = new StreamOutVisitor();
+
+    visitor_folder->accept(visitor);
+
+    string expected;
+    expected += "_____________________________________________\n";
+    expected += "structure/visitor/file1.txt\n";
+    expected += "---------------------------------------------\n";
+    expected += "I am file 1\n";
+    expected += "_____________________________________________\n";
+    expected += "\n";
+    expected += "_____________________________________________\n";
+    expected += "structure/visitor/file2.txt\n";
+    expected += "---------------------------------------------\n";
+    expected += "I am file 2\n";
+    expected += "_____________________________________________\n";
+    expected += "\n";
+    expected += "_____________________________________________\n";
+    expected += "structure/visitor/nested/file3.txt\n";
+    expected += "---------------------------------------------\n";
+    expected += "I am file 3\n";
+    expected += "_____________________________________________\n";
+    expected += "\n";
+    expected += "_____________________________________________\n";
+    expected += "structure/visitor/nested/file4.txt\n";
+    expected += "---------------------------------------------\n";
+    expected += "I am file 4\n";
+    expected += "_____________________________________________\n";
+    expected += "\n";
+
+    ASSERT_EQ(expected, visitor->getResult());
 }

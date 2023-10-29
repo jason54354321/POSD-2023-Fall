@@ -1,85 +1,90 @@
 #pragma once
 
-#include <list>
+#include <queue>
 #include <stack>
-
 #include "iterator.h"
-#include "node.h"
 
-class DfsIterator : public Iterator {
+class DfsIterator: public Iterator {
 public:
-  DfsIterator(Node *composite) : _root(composite) {}
+    DfsIterator(Node* composite) : _root(composite) {}
 
-  void first() {
-    while (!_stack.empty()) {
-      _stack.pop();
+    void first() {
+        while(!_stack.empty()){
+            _stack.pop();
+        }
+
+        _curr = _root;
+        _pushCurrIter();
+        next();
     }
 
-    _curr = _root;
-    _pushCurrIter();
-    next();
-  }
-
-  Node *currentItem() const { return _curr; }
-
-  void next() {
-    while (!_stack.empty() && _stack.top()->isDone()) {
-      _stack.pop();
+    Node * currentItem() const {
+        return _curr;
     }
-    if (_stack.empty()) {
-      return;
-    }
-    if (!_stack.top()->isDone()) {
-      _curr = _stack.top()->currentItem();
-      _stack.top()->next();
-      _pushCurrIter();
-    }
-  }
 
-  bool isDone() const { return _stack.empty(); }
-
+    void next() {
+        while(!_stack.empty() && _stack.top()->isDone()){
+            _stack.pop();
+        }
+        if(_stack.empty()){
+            return;
+        }
+        if(!_stack.top()->isDone()){
+            _curr = _stack.top()->currentItem();
+            _stack.top()->next();
+            _pushCurrIter();
+        }
+    }
+    
+    bool isDone() const {
+        return _stack.empty();
+    }
 private:
-  Node *_root;
-  Node *_curr;
-  std::stack<Iterator *> _stack;
+    Node * _root;
+    Node * _curr;
+    std::stack<Iterator *> _stack;
 
-  void _pushCurrIter() {
-    Iterator *it = _curr->createIterator();
-    it->first();
-    _stack.push(it);
-  }
+    void _pushCurrIter() {
+        Iterator * it = _curr->createIterator();
+        it->first();
+        _stack.push(it);
+    }
 };
 
-class BfsIterator : public Iterator {
+class BfsIterator: public Iterator {
 public:
-  BfsIterator(Node *composite) : _root(composite) {}
+    BfsIterator(Node* composite) : _root(composite) {}
 
-  void first() {
-    if (!_nextLevel.empty())
-      _nextLevel.clear();
+    void first(){
+        if(!_nextLevel.empty())
+            _nextLevel.clear();
 
-    _curr = _root;
-    _nextLevel.push_back(_curr);
-    next();
-  }
-
-  Node *currentItem() const { return _curr; }
-
-  void next() {
-    Iterator *it = _curr->createIterator();
-    for (it->first(); !it->isDone(); it->next()) {
-      _nextLevel.push_back(it->currentItem());
+        _curr = _root;
+        _nextLevel.push_back(_curr);
+        next();
     }
 
-    _nextLevel.pop_front();
-    _curr = _nextLevel.front();
-    return;
-  }
+    Node * currentItem() const {
+        return _curr;
+    }
 
-  bool isDone() const { return _nextLevel.empty(); }
+    void next() {
+        Iterator * it = _curr->createIterator();
+        for(it->first(); !it->isDone(); it->next()){
+            _nextLevel.push_back(it->currentItem());
+        }
 
+        _nextLevel.pop_front();
+        _curr = _nextLevel.front();
+        return;
+    }
+    
+    bool isDone() const {
+        return _nextLevel.empty();
+    }
 private:
-  Node *_root;
-  Node *_curr;
-  std::list<Node *> _nextLevel;
+    Node * _root;
+    Node * _curr;
+    std::list<Node *> _nextLevel;
 };
+
