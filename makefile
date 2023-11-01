@@ -1,6 +1,6 @@
 .PHONY: clean dirs
 
-CFLAGS = -std=c++11 -Wfatal-errors -Wall 
+CFLAGS = -std=c++11 -Wfatal-errors -Wall
 LIBS = -lgtest -lpthread
 
 UT_ALL = test/ut_all.cpp
@@ -11,7 +11,7 @@ SRC_HEADERS = src/file.h src/folder.h src/node.h src/iterator.h src/null_iterato
 all: dirs bin/ut_all
 
 bin/ut_all: $(UT_ALL) $(TEST_HEADERS) $(SRC_HEADERS)
-	g++ $(CFLAGS) -o $@ $<  $(LIBS) 
+	g++ -g $(CFLAGS) -o $@ $<  $(LIBS) 
 
 clean:
 	rm -rf bin obj

@@ -1,9 +1,11 @@
 #pragma once
 
+#include "file.h"
 #include "iterator.h"
 #include "node.h"
 #include "order_by.h"
 #include <algorithm>
+#include <iostream>
 #include <list>
 #include <sys/stat.h>
 
@@ -74,10 +76,10 @@ class Folder : public Node {
                 return new OrderByNameIterator(this, _operationCount);
                 break;
             case OrderBy::NameWithFolderFirst:
-                return new OrderByNameWithFolderFirstIterator();
+                return new OrderByNameWithFolderFirstIterator(this, _operationCount);
                 break;
             case OrderBy::Kind:
-                return new OrderByKindIterator();
+                return new OrderByKindIterator(this, _operationCount);
                 break;
         }
     }
@@ -204,7 +206,137 @@ class Folder : public Node {
         }
     };
 
-    class OrderByNameWithFolderFirstIterator : public Iterator {};
+    class OrderByNameWithFolderFirstIterator : public Iterator {
+      private:
+        Folder *_root;
+        int _operationCount;
+        std::list<Node *>::iterator _current;
 
-    class OrderByKindIterator : public Iterator {};
+      public:
+        OrderByNameWithFolderFirstIterator(Folder *composite, int operationCount)
+            : _root(composite), _operationCount(operationCount) {
+        }
+
+        ~OrderByNameWithFolderFirstIterator() {
+        }
+
+        static bool compareByName(Node *node1, Node *node2) {
+            return node1->name() < node2->name();
+        }
+
+        void first() override {
+            // split File & Folder
+            list<Node *> fileList;
+            list<Node *> folderList;
+            Iterator *it = _root->createIterator();
+            for (it->first(); !it->isDone(); it->next()) {
+                Folder *folder = dynamic_cast<Folder *>(it->currentItem());
+                if (folder) {
+                    folderList.push_back(folder);
+                }
+                File *file = dynamic_cast<File *>(it->currentItem());
+                if (file) {
+                    fileList.push_back(file);
+                }
+            }
+
+            // sort
+            folderList.sort(compareByName);
+            fileList.sort(compareByName);
+            // concate two list
+            list<Node *> concatedList = folderList;
+            concatedList.insert(concatedList.end(), fileList.begin(), fileList.end());
+
+            // replace old list
+            _root->_nodes = concatedList;
+            _current = _root->_nodes.begin();
+        }
+
+        void next() override {
+            _current++;
+        }
+
+        bool isDone() const override {
+            return _current == _root->_nodes.end();
+        }
+
+        Node *currentItem() const override {
+            return *(_current);
+        }
+    };
+
+    class OrderByKindIterator : public Iterator {
+      private:
+        Folder *_root;
+        int _operationCount;
+        std::list<Node *>::iterator _current;
+
+      public:
+        OrderByKindIterator(Folder *composite, int operationCount)
+            : _root(composite), _operationCount(operationCount) {
+        }
+
+        ~OrderByKindIterator() {
+        }
+
+        static bool compareByName(Node *node1, Node *node2) {
+            return node1->name() < node2->name();
+        }
+
+        bool isFileHasExtension(File *file) {
+            size_t index = file->name().find(".");
+            if (index == string::npos) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        void first() override {
+            // split File & Folder
+            list<Node *> fileNoExtList;
+            list<Node *> folderList;
+            list<Node *> fileList;
+            Iterator *it = _root->createIterator();
+            for (it->first(); !it->isDone(); it->next()) {
+                Folder *folder = dynamic_cast<Folder *>(it->currentItem());
+                if (folder) {
+                    folderList.push_back(folder);
+                    continue;
+                }
+                File *file = dynamic_cast<File *>(it->currentItem());
+                if (file) {
+                    if (isFileHasExtension(file)) {
+                        fileList.push_back(file);
+                    } else {
+                        fileNoExtList.push_back(file);
+                    }
+                    continue;
+                }
+            }
+            // sort
+            fileNoExtList.sort(compareByName);
+            folderList.sort(compareByName);
+            fileList.sort(compareByName);
+            // concate three list
+            list<Node *> concatedList = fileNoExtList;
+            concatedList.insert(concatedList.end(), folderList.begin(), folderList.end());
+            concatedList.insert(concatedList.end(), fileList.begin(), fileList.end());
+
+            // replace old list
+            _root->_nodes = concatedList;
+            _current = _root->_nodes.begin();
+        }
+        void next() override {
+            _current++;
+        }
+
+        bool isDone() const override {
+            return _current == _root->_nodes.end();
+        }
+
+        Node *currentItem() const override {
+            return *(_current);
+        }
+    };
 };

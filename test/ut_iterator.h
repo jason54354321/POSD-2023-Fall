@@ -18,11 +18,9 @@ class IteratorTest : public ::testing::Test {
 
         favorite = new Folder("structure/home/Documents/favorites");
         document->add(favorite);
-        ddd = new File(
-            "structure/home/Documents/favorites/domain-driven-design.pdf");
+        ddd = new File("structure/home/Documents/favorites/domain-driven-design.pdf");
         favorite->add(ddd);
-        ca = new File(
-            "structure/home/Documents/favorites/clean-architecture.pdf");
+        ca = new File("structure/home/Documents/favorites/clean-architecture.pdf");
         favorite->add(ca);
         cqrs = new File("structure/home/Documents/favorites/cqrs.pdf");
         favorite->add(cqrs);
@@ -165,7 +163,6 @@ TEST_F(IteratorTest, BFS) {
     ASSERT_TRUE(bfsIt->isDone());
 }
 
-// note: root node wont be interate
 TEST_F(IteratorTest, SortByName) {
     Iterator *it = home->createIterator(OrderBy::Name);
     it->first();
@@ -174,4 +171,42 @@ TEST_F(IteratorTest, SortByName) {
     ASSERT_EQ("Downloads", it->currentItem()->name());
     it->next();
     ASSERT_EQ("my_profile", it->currentItem()->name());
+
+    delete it;
+}
+
+TEST_F(IteratorTest, SortByNameWithFolderFirst) {
+    Iterator *it = home->createIterator(OrderBy::NameWithFolderFirst);
+    Folder *aaaaa = new Folder("structure/home/AAAAA");
+    home->add(aaaaa);
+
+    it->first();
+    ASSERT_EQ("AAAAA", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("Documents", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("Downloads", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("my_profile", it->currentItem()->name());
+
+    delete aaaaa;
+    delete it;
+}
+
+TEST_F(IteratorTest, SortByKind) {
+    Iterator *it = home->createIterator(OrderBy::Kind);
+    Folder *aaaaa = new Folder("structure/home/AAAAA");
+    home->add(aaaaa);
+
+    it->first();
+    ASSERT_EQ("my_profile", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("AAAAA", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("Documents", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("Downloads", it->currentItem()->name());
+
+    delete aaaaa;
+    delete it;
 }
