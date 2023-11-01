@@ -167,7 +167,30 @@ public:
     }
   };
 
-  class OrderByNameIterator : public Iterator {};
+  class OrderByNameIterator : public Iterator {
+  private:
+    Folder *_composite;
+    int _operationCount;
+
+  public:
+    OrderByNameIterator(Folder *composite, int operationCount)
+        : _composite(composite), _operationCount(operationCount) {
+    }
+
+    ~OrderByNameIterator() {
+    }
+    void first() override {
+    }
+
+    void next() override {
+    }
+
+    bool isDone() const override {
+    }
+
+    Node *currentItem() const override {
+    }
+  };
 
   class OrderByNameWithFolderFirstIterator : public Iterator {};
 
