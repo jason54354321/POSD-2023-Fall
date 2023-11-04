@@ -33,6 +33,24 @@ class IteratorTest : public ::testing::Test {
 
         funny = new File("structure/home/Downloads/funny.png");
         download->add(funny);
+
+        // my test case
+        my_structure = new Folder("my_structure");
+
+        number_foler = new Folder("my_structure/123");
+        my_structure->add(number_foler);
+
+        aaa_lower_folder = new Folder("my_structure/aaa");
+        my_structure->add(aaa_lower_folder);
+
+        aaa_upper_folder = new Folder("my_structure/AAA");
+        my_structure->add(aaa_upper_folder);
+
+        no_extension_file = new File("my_structure/extension_file.mp3");
+        my_structure->add(no_extension_file);
+
+        has_extension_file = new File("my_structure/no_extension_file");
+        my_structure->add(has_extension_file);
     }
 
     void TearDown() {
@@ -46,6 +64,13 @@ class IteratorTest : public ::testing::Test {
         delete ca;
         delete cqrs;
         delete funny;
+
+        delete my_structure;
+        delete number_foler;
+        delete aaa_lower_folder;
+        delete aaa_upper_folder;
+        delete no_extension_file;
+        delete has_extension_file;
     }
 
     Node *home;
@@ -58,6 +83,12 @@ class IteratorTest : public ::testing::Test {
     Node *ca;
     Node *cqrs;
     Node *funny;
+    Node *my_structure;
+    Node *number_foler;
+    Node *aaa_lower_folder;
+    Node *aaa_upper_folder;
+    Node *no_extension_file;
+    Node *has_extension_file;
 };
 
 TEST_F(IteratorTest, Normal) {
@@ -163,7 +194,7 @@ TEST_F(IteratorTest, BFS) {
     ASSERT_TRUE(bfsIt->isDone());
 }
 
-TEST_F(IteratorTest, SortByName) {
+TEST_F(IteratorTest, SortByName_TA) {
     Iterator *it = home->createIterator(OrderBy::Name);
     it->first();
     ASSERT_EQ("Documents", it->currentItem()->name());
@@ -175,7 +206,7 @@ TEST_F(IteratorTest, SortByName) {
     delete it;
 }
 
-TEST_F(IteratorTest, SortByNameWithFolderFirst) {
+TEST_F(IteratorTest, SortByNameWithFolderFirst_TA) {
     Iterator *it = home->createIterator(OrderBy::NameWithFolderFirst);
 
     it->first();
@@ -188,7 +219,7 @@ TEST_F(IteratorTest, SortByNameWithFolderFirst) {
     delete it;
 }
 
-TEST_F(IteratorTest, SortByKind) {
+TEST_F(IteratorTest, SortByKind_TA) {
     Iterator *it = home->createIterator(OrderBy::Kind);
 
     it->first();
@@ -197,6 +228,54 @@ TEST_F(IteratorTest, SortByKind) {
     ASSERT_EQ("Documents", it->currentItem()->name());
     it->next();
     ASSERT_EQ("Downloads", it->currentItem()->name());
+
+    delete it;
+}
+
+TEST_F(IteratorTest, SortByName_My) {
+    Iterator *it = my_structure->createIterator(OrderBy::Name);
+    it->first();
+    ASSERT_EQ("123", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("AAA", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("aaa", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("extension_file.mp3", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("no_extension_file", it->currentItem()->name());
+
+    delete it;
+}
+
+TEST_F(IteratorTest, SortByNameWithFolderFirst_My) {
+    Iterator *it = my_structure->createIterator(OrderBy::NameWithFolderFirst);
+    it->first();
+    ASSERT_EQ("123", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("AAA", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("aaa", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("extension_file.mp3", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("no_extension_file", it->currentItem()->name());
+
+    delete it;
+}
+
+TEST_F(IteratorTest, SortByKind_My) {
+    Iterator *it = my_structure->createIterator(OrderBy::Kind);
+    it->first();
+    ASSERT_EQ("no_extension_file", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("123", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("AAA", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("aaa", it->currentItem()->name());
+    it->next();
+    ASSERT_EQ("extension_file.mp3", it->currentItem()->name());
 
     delete it;
 }
