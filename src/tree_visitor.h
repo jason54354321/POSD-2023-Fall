@@ -1,14 +1,17 @@
 #pragma once
 
-#include "visitor.h"
 #include "order_by.h"
+#include "visitor.h"
+#include <string>
 
-class TreeVisitor: public Visitor {
-public:
+using namespace std;
+
+class TreeVisitor : public Visitor {
+  public:
     TreeVisitor(OrderBy orderBy);
 
-    void visitFile(File * file);
-    void visitFolder(Folder * folder);
+    void visitFile(File *file);
+    void visitFolder(Folder *folder);
 
     string getTree();
 };
