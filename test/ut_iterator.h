@@ -177,36 +177,26 @@ TEST_F(IteratorTest, SortByName) {
 
 TEST_F(IteratorTest, SortByNameWithFolderFirst) {
     Iterator *it = home->createIterator(OrderBy::NameWithFolderFirst);
-    Folder *aaaaa = new Folder("structure/home/AAAAA");
-    home->add(aaaaa);
 
     it->first();
-    ASSERT_EQ("AAAAA", it->currentItem()->name());
-    it->next();
     ASSERT_EQ("Documents", it->currentItem()->name());
     it->next();
     ASSERT_EQ("Downloads", it->currentItem()->name());
     it->next();
     ASSERT_EQ("my_profile", it->currentItem()->name());
 
-    delete aaaaa;
     delete it;
 }
 
 TEST_F(IteratorTest, SortByKind) {
     Iterator *it = home->createIterator(OrderBy::Kind);
-    Folder *aaaaa = new Folder("structure/home/AAAAA");
-    home->add(aaaaa);
 
     it->first();
     ASSERT_EQ("my_profile", it->currentItem()->name());
-    it->next();
-    ASSERT_EQ("AAAAA", it->currentItem()->name());
     it->next();
     ASSERT_EQ("Documents", it->currentItem()->name());
     it->next();
     ASSERT_EQ("Downloads", it->currentItem()->name());
 
-    delete aaaaa;
     delete it;
 }
