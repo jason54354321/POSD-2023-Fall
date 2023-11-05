@@ -1,12 +1,16 @@
-#include "../src/node.h"
-#include "../src/folder.h"
 #include "../src/file.h"
-#include "../src/visitor.h"
 #include "../src/find_by_name_visitor.h"
+#include "../src/folder.h"
+#include "../src/node.h"
+#include "../src/order_by.h"
 #include "../src/stream_out_visitor.h"
+#include "../src/tree_visitor.h"
+#include "../src/visitor.h"
 
-class VisitorTest: public ::testing::Test {
-protected:
+#include <gtest/gtest.h>
+
+class VisitorTest : public ::testing::Test {
+  protected:
     virtual void SetUp() {
         home = new Folder("structure/home");
 
@@ -28,8 +32,8 @@ protected:
         cqrs = new File("structure/home/Documents/favorites/cqrs.pdf");
         favorite->add(cqrs);
 
-        note = new File("structure/home/Documents/note.txt");
-        document->add(note);
+        /* note = new File("structure/home/Documents/note.txt"); */
+        /* document->add(note); */
 
         hello2 = new File("structure/home/hello.txt");
         home->add(hello2);
@@ -73,30 +77,30 @@ protected:
         delete file3;
         delete file4;
     }
-    
-    Node * home;
-    Node * profile;
-    Node * download;
-    Node * document;
-    Node * note;
-    Node * favorite;
-    Node * ddd;
-    Node * ca;
-    Node * cqrs;
-    Node * funny;
-    Node * hello1;
-    Node * hello2;
 
-    Node * visitor_folder;
-    Node * file1;
-    Node * file2;
-    Node * nested;
-    Node * file3;
-    Node * file4;
+    Node *home;
+    Node *profile;
+    Node *download;
+    Node *document;
+    Node *note;
+    Node *favorite;
+    Node *ddd;
+    Node *ca;
+    Node *cqrs;
+    Node *funny;
+    Node *hello1;
+    Node *hello2;
+
+    Node *visitor_folder;
+    Node *file1;
+    Node *file2;
+    Node *nested;
+    Node *file3;
+    Node *file4;
 };
 
 TEST_F(VisitorTest, findNormal) {
-    FindByNameVisitor * visitor = new FindByNameVisitor("clean-architecture.pdf");
+    FindByNameVisitor *visitor = new FindByNameVisitor("clean-architecture.pdf");
 
     home->accept(visitor);
 
@@ -105,7 +109,7 @@ TEST_F(VisitorTest, findNormal) {
 }
 
 TEST_F(VisitorTest, findMany) {
-    FindByNameVisitor * visitor = new FindByNameVisitor("hello.txt");
+    FindByNameVisitor *visitor = new FindByNameVisitor("hello.txt");
 
     home->accept(visitor);
 
@@ -113,7 +117,7 @@ TEST_F(VisitorTest, findMany) {
 }
 
 TEST_F(VisitorTest, findNothing) {
-    FindByNameVisitor * visitor = new FindByNameVisitor("nothing-to_find");
+    FindByNameVisitor *visitor = new FindByNameVisitor("nothing-to_find");
 
     home->accept(visitor);
 
@@ -121,7 +125,7 @@ TEST_F(VisitorTest, findNothing) {
 }
 
 TEST_F(VisitorTest, streamOutFile) {
-    StreamOutVisitor * visitor = new StreamOutVisitor();
+    StreamOutVisitor *visitor = new StreamOutVisitor();
 
     profile->accept(visitor);
 
@@ -137,7 +141,7 @@ TEST_F(VisitorTest, streamOutFile) {
 }
 
 TEST_F(VisitorTest, streamOutFolder) {
-    StreamOutVisitor * visitor = new StreamOutVisitor();
+    StreamOutVisitor *visitor = new StreamOutVisitor();
 
     nested->accept(visitor);
 
@@ -159,7 +163,7 @@ TEST_F(VisitorTest, streamOutFolder) {
 }
 
 TEST_F(VisitorTest, streamOutNestedFolder) {
-    StreamOutVisitor * visitor = new StreamOutVisitor();
+    StreamOutVisitor *visitor = new StreamOutVisitor();
 
     visitor_folder->accept(visitor);
 
@@ -190,4 +194,27 @@ TEST_F(VisitorTest, streamOutNestedFolder) {
     expected += "\n";
 
     ASSERT_EQ(expected, visitor->getResult());
+}
+
+TEST_F(VisitorTest, TreeVisitor_OrderByName) {
+    string expected = ".\n\
+├── Documents\n\
+│   ├── clean-architecture.pdf\n\
+│   ├── domain-driven-design.pub\n\
+│   ├── hello.txt\n\
+│   ├── note.txt\n\
+│   ├── object-oriented-analysis-and-design.pdf\n\
+│   └── programming\n\
+│       ├── cpp.pub\n\
+│       ├── oop.pdf\n\
+│       └── python.pub\n\
+├── Downloads\n\
+│   └── funny.png\n\
+├── hello.txt\n\
+└── my_profile\n\
+";
+
+    TreeVisitor *visitor = new TreeVisitor(OrderBy::Name);
+    home->accept(visitor);
+    ASSERT_EQ(expected, visitor->getTree());
 }
