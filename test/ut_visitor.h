@@ -32,8 +32,8 @@ class VisitorTest : public ::testing::Test {
         cqrs = new File("structure/home/Documents/favorites/cqrs.pdf");
         favorite->add(cqrs);
 
-        /* note = new File("structure/home/Documents/note.txt"); */
-        /* document->add(note); */
+        note = new File("structure/home/Documents/note.txt");
+        document->add(note);
 
         hello2 = new File("structure/home/hello.txt");
         home->add(hello2);
@@ -199,22 +199,59 @@ TEST_F(VisitorTest, streamOutNestedFolder) {
 TEST_F(VisitorTest, TreeVisitor_OrderByName) {
     string expected = ".\n\
 ├── Documents\n\
-│   ├── clean-architecture.pdf\n\
-│   ├── domain-driven-design.pub\n\
-│   ├── hello.txt\n\
-│   ├── note.txt\n\
-│   ├── object-oriented-analysis-and-design.pdf\n\
-│   └── programming\n\
-│       ├── cpp.pub\n\
-│       ├── oop.pdf\n\
-│       └── python.pub\n\
+│   ├── favorites\n\
+│   │   ├── clean-architecture.pdf\n\
+│   │   ├── cqrs.pdf\n\
+│   │   └── domain-driven-design.pdf\n\
+│   └── note.txt\n\
 ├── Downloads\n\
 │   └── funny.png\n\
+├── hello.txt\n\
 ├── hello.txt\n\
 └── my_profile\n\
 ";
 
     TreeVisitor *visitor = new TreeVisitor(OrderBy::Name);
+    home->accept(visitor);
+    ASSERT_EQ(expected, visitor->getTree());
+}
+
+TEST_F(VisitorTest, TreeVisitor_OrderByFolderFirst) {
+    string expected = ".\n\
+├── Documents\n\
+│   ├── favorites\n\
+│   │   ├── clean-architecture.pdf\n\
+│   │   ├── cqrs.pdf\n\
+│   │   └── domain-driven-design.pdf\n\
+│   └── note.txt\n\
+├── Downloads\n\
+│   └── funny.png\n\
+├── hello.txt\n\
+├── hello.txt\n\
+└── my_profile\n\
+";
+
+    TreeVisitor *visitor = new TreeVisitor(OrderBy::NameWithFolderFirst);
+    home->accept(visitor);
+    ASSERT_EQ(expected, visitor->getTree());
+}
+
+TEST_F(VisitorTest, TreeVisitor_OrderByKind) {
+    string expected = ".\n\
+├── my_profile\n\
+├── Documents\n\
+│   ├── favorites\n\
+│   │   ├── clean-architecture.pdf\n\
+│   │   ├── cqrs.pdf\n\
+│   │   └── domain-driven-design.pdf\n\
+│   └── note.txt\n\
+├── Downloads\n\
+│   └── funny.png\n\
+├── hello.txt\n\
+└── hello.txt\n\
+";
+
+    TreeVisitor *visitor = new TreeVisitor(OrderBy::Kind);
     home->accept(visitor);
     ASSERT_EQ(expected, visitor->getTree());
 }
