@@ -81,6 +81,8 @@ class Folder : public Node {
             case OrderBy::Kind:
                 return new OrderByKindIterator(this, _operationCount);
                 break;
+            default:
+                return new NullIterator();
         }
     }
 
