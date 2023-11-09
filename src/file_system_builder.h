@@ -30,6 +30,7 @@ class FileSystemBuilder {
         if (_stack.size() == 1) {
             return;
         }
+        cout << "end folder:" << endl;
         Folder *inner_folder = _stack.top();
         _stack.pop();
         Folder *outter_folder = _stack.top();
