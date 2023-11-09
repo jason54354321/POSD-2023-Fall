@@ -327,8 +327,11 @@ class Folder : public Node {
                     continue;
                 }
             }
-            // sort
+            // sort name first, cuz it's second priority.
             fileNoExtList.sort(compareByName);
+            folderList.sort(compareByName);
+            // sort extension
+            fileList.sort(compareByName);
             folderList.sort(compareByExtension);
             fileList.sort(compareByExtension);
             // concate three list

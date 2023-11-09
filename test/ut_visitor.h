@@ -241,9 +241,9 @@ TEST_F(VisitorTest, TreeVisitor_OrderByKind) {
 ├── my_profile\n\
 ├── Documents\n\
 │   ├── favorites\n\
-│   │   ├── domain-driven-design.pdf\n\
 │   │   ├── clean-architecture.pdf\n\
-│   │   └── cqrs.pdf\n\
+│   │   ├── cqrs.pdf\n\
+│   │   └── domain-driven-design.pdf\n\
 │   └── note.txt\n\
 ├── Downloads\n\
 │   └── funny.png\n\
