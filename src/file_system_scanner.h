@@ -24,7 +24,7 @@ class FileSystemScanner {
     }
 
     bool isDone() {
-        cout << "isDone" << endl;
+        cout << "isDone: " << (dp == nullptr) << endl;
         return dp == nullptr;
     }
 
