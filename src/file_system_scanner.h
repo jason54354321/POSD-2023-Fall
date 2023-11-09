@@ -25,7 +25,7 @@ class FileSystemScanner {
 
     bool isDone() {
         cout << "isDone" << endl;
-        return dp == NULL;
+        return dp == nullptr;
     }
 
     void setPath(string path) {
