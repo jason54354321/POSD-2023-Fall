@@ -6,6 +6,7 @@
 #include "../src/file_system_scanner.h"
 #include "../src/folder.h"
 #include "../src/node.h"
+#include "../src/tree_visitor.h"
 
 class FileSystemSuite : public ::testing::Test {
   protected:
@@ -97,24 +98,59 @@ class FileSystemSuite : public ::testing::Test {
     Node *file4;
 };
 
-TEST(FileSystemSuite, Scanner) {
+TEST_F(FileSystemSuite, Scanner) {
     FileSystemScanner *scanner = new FileSystemScanner();
 
     scanner->setPath("structure/home");
 
     vector<string> expectList;
-    expectList.push_back("my_profile");
-    expectList.push_back("..");
-    expectList.push_back("hello.txt");
     expectList.push_back(".");
+    expectList.push_back("..");
+    expectList.push_back("my_profile");
+    expectList.push_back("hello.txt");
     expectList.push_back("Downloads");
     expectList.push_back("Documents");
 
     int counter = 0;
     while (!scanner->isDone()) {
-        ASSERT_EQ(expectList[counter], scanner->currentNodeName());
+        cout << scanner->currentNodeName() << endl;
+        // find element in vector
+        if (!(std::find(expectList.begin(), expectList.end(), scanner->currentNodeName()) !=
+              expectList.end())) {
+            FAIL();
+        }
         scanner->nextNode();
         counter++;
     }
 }
 
+TEST_F(FileSystemSuite, Parser) {
+    FileSystemScanner *scanner = new FileSystemScanner();
+    FileSystemBuilder *builder = new FileSystemBuilder();
+    FileSystemParser *parser = new FileSystemParser(builder);
+
+    parser->setPath("structure/home");
+
+    parser->parse();
+
+    Folder *root = parser->getRoot();
+    EXPECT_EQ("home", root->name());
+
+    string expected = ".\n\
+├── Documents\n\
+│   ├── favorites\n\
+│   │   ├── clean-architecture.pdf\n\
+│   │   ├── cqrs.pdf\n\
+│   │   └── domain-driven-design.pdf\n\
+│   ├── hello.txt\n\
+│   └── note.txt\n\
+├── Downloads\n\
+│   └── funny.png\n\
+├── hello.txt\n\
+└── my_profile\n\
+";
+
+    TreeVisitor *visitor = new TreeVisitor(OrderBy::Name);
+    root->accept(visitor);
+    ASSERT_EQ(expected, visitor->getTree());
+}

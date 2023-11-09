@@ -1,16 +1,18 @@
 #pragma once
 
+#include <dirent.h>
 #include <string>
 #include <sys/types.h>
-#include <dirent.h>
 
 using std::string;
 
 class FileSystemScanner {
-private:
+  private:
+    string _scanPath;
     DIR *dirp;
-    struct dirent* dp = 0;
-public:
+    struct dirent *dp = 0;
+
+  public:
     bool isFile() {
         return dp->d_type == DT_REG;
     }
@@ -24,13 +26,18 @@ public:
     }
 
     void setPath(string path) {
-        const char * path_c = path.c_str();
+        _scanPath = path;
+        const char *path_c = path.c_str();
         dirp = opendir(path_c);
         dp = readdir(dirp);
     }
 
     string currentNodeName() {
         return dp->d_name;
+    }
+
+    string pwd() {
+        return _scanPath;
     }
 
     void nextNode() {
