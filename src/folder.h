@@ -187,7 +187,7 @@ class Folder : public Node {
         }
 
         static bool compareByName(Node *node1, Node *node2) {
-            return node1->name().at(0) < node2->name().at(0);
+            return node1->name() < node2->name();
         }
 
         void first() override {
