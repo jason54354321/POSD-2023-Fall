@@ -124,6 +124,26 @@ TEST_F(FileSystemSuite, Scanner) {
     }
 }
 
+TEST_F(FileSystemSuite, ScannerTest2) {
+    FileSystemScanner *scanner = new FileSystemScanner();
+
+    scanner->setPath("structure/home/Documents/favorites");
+
+    /* vector<string> expectList; */
+    /* expectList.push_back("."); */
+    /* expectList.push_back(".."); */
+    /* expectList.push_back("my_profile"); */
+    /* expectList.push_back("hello.txt"); */
+    /* expectList.push_back("Downloads"); */
+    /* expectList.push_back("Documents"); */
+
+    while (!scanner->isDone()) {
+        cout << scanner->currentNodeName() << endl;
+        // find element in vector
+        scanner->nextNode();
+    }
+}
+
 TEST_F(FileSystemSuite, Parser) {
     FileSystemScanner *scanner = new FileSystemScanner();
     FileSystemBuilder *builder = new FileSystemBuilder();
