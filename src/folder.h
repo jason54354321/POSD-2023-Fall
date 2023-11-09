@@ -273,16 +273,19 @@ class Folder : public Node {
         int _operationCount;
         std::list<Node *>::iterator _current;
 
-      public:
-        OrderByKindIterator(Folder *composite, int operationCount)
-            : _root(composite), _operationCount(operationCount) {
-        }
-
-        ~OrderByKindIterator() {
-        }
-
         static bool compareByName(Node *node1, Node *node2) {
             return node1->name() < node2->name();
+        }
+
+        static bool compareByExtension(Node *node1, Node *node2) {
+            return getExtension(node1) < getExtension(node2);
+        }
+
+        static string getExtension(Node *node) {
+            string _path = node->name();
+            size_t dot = _path.rfind(".");
+            cout << _path.substr(dot + 1) << endl;
+            return _path.substr(dot + 1);
         }
 
         bool isFileHasExtension(File *file) {
@@ -292,6 +295,14 @@ class Folder : public Node {
             } else {
                 return true;
             }
+        }
+
+      public:
+        OrderByKindIterator(Folder *composite, int operationCount)
+            : _root(composite), _operationCount(operationCount) {
+        }
+
+        ~OrderByKindIterator() {
         }
 
         void first() override {
@@ -318,8 +329,8 @@ class Folder : public Node {
             }
             // sort
             fileNoExtList.sort(compareByName);
-            folderList.sort(compareByName);
-            fileList.sort(compareByName);
+            folderList.sort(compareByExtension);
+            fileList.sort(compareByExtension);
             // concate three list
             list<Node *> concatedList = fileNoExtList;
             concatedList.insert(concatedList.end(), folderList.begin(), folderList.end());
