@@ -1,10 +1,12 @@
 #pragma once
 
 #include <dirent.h>
+#include <iostream>
 #include <string>
 #include <sys/types.h>
 
 using std::string;
+using namespace std;
 
 class FileSystemScanner {
   private:
@@ -22,6 +24,7 @@ class FileSystemScanner {
     }
 
     bool isDone() {
+        cout << "isDone" << endl;
         return dp == NULL;
     }
 
