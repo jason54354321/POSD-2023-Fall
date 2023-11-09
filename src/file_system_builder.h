@@ -28,6 +28,7 @@ class FileSystemBuilder {
     }
 
     void endFolder() {
+        cout << "now stack size:" << _stack.size() << endl;
         if (_stack.size() == 1) {
             return;
         }
