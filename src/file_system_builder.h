@@ -23,6 +23,7 @@ class FileSystemBuilder {
 
     void buildFolder(string path) {
         Folder *folder = new Folder(path);
+        cout << "build new folder:" << endl;
         _stack.push(folder);
     }
 
