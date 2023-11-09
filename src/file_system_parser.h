@@ -36,7 +36,6 @@ class FileSystemParser {
                 cout << path << endl;
                 builder->buildFile(path);
             } else if (scanner->isFolder()) {
-                // TODO: how to iterate inner folder
                 string path = scanner->pwd() + "/" + scanner->currentNodeName();
                 cout << path << endl;
                 builder->buildFolder(path);
@@ -46,6 +45,7 @@ class FileSystemParser {
                 parseHelper(new_scanner, builder);
             }
 
+            cout << "next node" << endl;
             scanner->nextNode();
 
             // folder end
