@@ -37,9 +37,9 @@ class TreeVisitor : public Visitor {
     }
 
     bool hasNextNode(Node *folder) {
-        cout << "Named:" << folder->name() << "'s parent has " << getParentFolderSize(folder)
-             << "item";
-        cout << ", and the _counter:" << _counter[_currentLevel] << endl;
+        // cout << "Named:" << folder->name() << "'s parent has " << getParentFolderSize(folder)
+        //      << "item";
+        // cout << ", and the _counter:" << _counter[_currentLevel] << endl;
         return getParentFolderSize(folder) > _counter[_currentLevel];
     }
 

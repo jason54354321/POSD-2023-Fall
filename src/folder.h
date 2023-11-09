@@ -284,7 +284,6 @@ class Folder : public Node {
         static string getExtension(Node *node) {
             string _path = node->name();
             size_t dot = _path.rfind(".");
-            cout << _path.substr(dot + 1) << endl;
             return _path.substr(dot + 1);
         }
 
