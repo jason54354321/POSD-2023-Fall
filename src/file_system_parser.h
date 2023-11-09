@@ -27,6 +27,12 @@ class FileSystemParser {
 
     void parseHelper(FileSystemScanner *scanner, FileSystemBuilder *builder) {
         while (1) {
+            // folder end, NEEDS to place at very first, or the "." & ".." will fuck me up
+            if (scanner->isDone()) {
+                builder->endFolder();
+                break;
+            }
+
             if (scanner->currentNodeName() == "." || scanner->currentNodeName() == "..") {
                 scanner->nextNode();
                 continue;
@@ -47,12 +53,6 @@ class FileSystemParser {
 
             cout << "next node" << endl;
             scanner->nextNode();
-
-            // folder end
-            if (scanner->isDone()) {
-                builder->endFolder();
-                break;
-            }
         }
     }
 
