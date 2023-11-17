@@ -1,5 +1,6 @@
 #pragma once
 
+#include "json_iterator.h"
 #include "value.h"
 
 class StringValue : public Value {
@@ -12,5 +13,9 @@ class StringValue : public Value {
 
     string toString() override {
         return _value;
+    }
+
+    JsonIterator *createIterator() {
+        return new NullIterator();
     }
 };

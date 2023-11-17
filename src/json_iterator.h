@@ -18,4 +18,25 @@ class JsonIterator {
     virtual bool isDone() const = 0;
 };
 
-class NullIterator : public JsonIterator {};
+class NullIterator : public JsonIterator {
+  public:
+    void first() override {
+        throw "NullIterator error";
+    }
+
+    string currentKey() const override {
+        throw "NullIterator error";
+    }
+
+    Value *currentValue() const override {
+        throw "NullIterator error";
+    }
+
+    void next() override {
+        throw "NullIterator error";
+    }
+
+    bool isDone() const override {
+        throw "NullIterator error";
+    }
+};

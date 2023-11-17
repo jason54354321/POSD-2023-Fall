@@ -6,8 +6,6 @@
 #include <string>
 
 class JsonObject : public Value {
-    friend class JsonObjectIterator;
-
   private:
     std::map<string, Value *> _map;
 
@@ -24,6 +22,22 @@ class JsonObject : public Value {
         void first() override {
             _it = _json_object->_map.begin();
         }
+
+        void next() override {
+            _it++;
+        }
+
+        bool isDone() const override {
+            return _it == _json_object->_map.end();
+        }
+
+        string currentKey() const override {
+            return _it->first;
+        }
+
+        Value *currentValue() const override {
+            return _it->second;
+        }
     };
 
     string toString() override {
@@ -37,7 +51,7 @@ class JsonObject : public Value {
         _map[key] = value;
     }
 
-    JsonObjectIterator *createIterator() {
+    JsonIterator *createIterator() override {
         return new JsonObjectIterator(this);
     }
 };
