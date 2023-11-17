@@ -1,10 +1,10 @@
 #pragma once
 
-#include <string>
 #include <sstream>
+#include <string>
 
 class JsonScanner {
-public:
+  public:
     void setInput(std::string input) {
         _input = input;
         ss.str(_input);
@@ -16,12 +16,12 @@ public:
 
         return token;
     }
-    
+
     bool isDone() const {
         return ss.eof();
     }
 
-private:
+  private:
     std::string _input;
     std::stringstream ss;
 };
