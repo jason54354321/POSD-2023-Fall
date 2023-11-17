@@ -2,6 +2,7 @@
 
 #include "json_iterator.h"
 #include "value.h"
+#include "visitor.h"
 #include <map>
 #include <string>
 
@@ -40,6 +41,10 @@ class JsonObject : public Value {
         }
     };
 
+    int getMapSize() const {
+        return _map.size();
+    }
+
     string toString() override {
     }
 
@@ -53,5 +58,9 @@ class JsonObject : public Value {
 
     JsonIterator *createIterator() override {
         return new JsonObjectIterator(this);
+    }
+
+    void accept(JsonVisitor *visitor) override {
+        visitor->visitJsonObject(this);
     }
 };

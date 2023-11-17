@@ -2,6 +2,7 @@
 
 #include "json_iterator.h"
 #include "value.h"
+#include "visitor.h"
 
 class StringValue : public Value {
   private:
@@ -15,7 +16,11 @@ class StringValue : public Value {
         return _value;
     }
 
-    JsonIterator *createIterator() {
+    JsonIterator *createIterator() override {
         return new NullIterator();
+    }
+
+    void accept(JsonVisitor *visitor) override {
+        visitor->visitStringValue(this);
     }
 };

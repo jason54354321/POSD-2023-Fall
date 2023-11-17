@@ -5,6 +5,7 @@
 using namespace std;
 
 class JsonIterator;
+class JsonVisitor;
 
 class Value {
   public:
@@ -12,4 +13,5 @@ class Value {
     }
 
     virtual JsonIterator *createIterator() = 0;
+    virtual void accept(JsonVisitor *visitor) = 0;
 };
