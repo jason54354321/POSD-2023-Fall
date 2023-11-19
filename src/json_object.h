@@ -53,7 +53,7 @@ class JsonObject : public Value {
         int count = 0;
         for (auto m : _map) {
             count++;
-            ss << "\"" << m.first << "\":\"" << m.second << "\""
+            ss << "\"" << m.first << "\":\"" << m.second->toString() << "\""
                << "\n";
             if (count < _map.size()) ss << ",";
         }
