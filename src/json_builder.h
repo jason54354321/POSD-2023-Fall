@@ -10,9 +10,7 @@
 class JsonBuilder {
   private:
     stack<JsonObject *> _stack;
-    JsonObject *last_pop;
-    JsonObject *second_last_pop;
-    JsonObject *third_last_pop;
+    JsonObject *root;
 
   public:
     void buildValue(std::string key, std::string value) {
@@ -25,8 +23,9 @@ class JsonBuilder {
     void buildObject(std::string key) {
         cout << "building Object: " << key << endl;
         if (key == "") {
-            JsonObject *object = new JsonObject();
-            _stack.push(object);
+            root = new JsonObject();
+            _stack.push(root);
+            return;
         }
         JsonObject *object = new JsonObject();
         _stack.top()->set(key, object);
@@ -34,18 +33,15 @@ class JsonBuilder {
     }
 
     void endObject() {
+        if (_stack.empty()) {
+            return;
+        }
         cout << "ending Object: " << _stack.top() << endl;
-        third_last_pop = second_last_pop;
-        second_last_pop = last_pop;
-        last_pop = _stack.top();
         _stack.pop();
     }
 
     JsonObject *getJsonObject() {
-        /* cout << "getJsonObject" << last_pop << endl; */
-        /* JsonIterator *it = last_pop->createIterator(); */
-        /* it->first(); */
-        /* return dynamic_cast<JsonObject *>(it->currentValue()); */
-        return third_last_pop;
+        cout << "getJsonObject" << root << endl;
+        return root;
     }
 };

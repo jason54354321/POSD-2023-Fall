@@ -62,7 +62,7 @@ TEST_F(ParserSuite, parser) {
         }\n\
     }\n\
 }";
-    /* EXPECT_EQ(expected, visitor->getResult()); */
+    EXPECT_EQ(expected, visitor->getResult());
 
     delete scanner;
     delete builder;
