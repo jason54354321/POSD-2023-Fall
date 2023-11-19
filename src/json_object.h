@@ -59,6 +59,8 @@ class JsonObject : public Value {
         }
 
         ss << "\n}";
+
+        return ss.str();
     }
 
     Value *getValue(string key) {
