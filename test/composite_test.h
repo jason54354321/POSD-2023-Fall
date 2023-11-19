@@ -25,9 +25,15 @@ class CompositeSuite : public testing::Test {
     }
 };
 
-TEST_F(CompositeSuite, composite) {
+TEST_F(CompositeSuite, StringValue) {
     ASSERT_EQ("\"123\"", object->getValue("1")->toString());
     ASSERT_EQ("\"456\"", object->getValue("2")->toString());
+}
+
+TEST_F(CompositeSuite, JsonObject) {
+    string expected = "{\n\"1\":\"123\",\n\"2\":\"456\"\n}";
+
+    EXPECT_EQ(expected, object->toString());
 }
 
 TEST_F(CompositeSuite, Iterator) {
