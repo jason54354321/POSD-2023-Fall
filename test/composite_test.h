@@ -53,6 +53,10 @@ TEST_F(CompositeSuite, Iterator) {
     ASSERT_EQ(true, it->isDone());
 }
 
+TEST_F(CompositeSuite, NotExistedKey) {
+    EXPECT_THROW(object->getValue("9"), const char *);
+}
+
 TEST_F(CompositeSuite, NullIteraotr) {
     StringValue *string_value = new StringValue("123");
 

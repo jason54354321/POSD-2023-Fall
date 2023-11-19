@@ -63,6 +63,9 @@ class JsonObject : public Value {
     }
 
     Value *getValue(string key) {
+        if (_map[key] == nullptr) {
+            throw "key is not exist";
+        }
         return _map[key];
     }
 
