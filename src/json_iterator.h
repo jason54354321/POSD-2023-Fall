@@ -21,22 +21,22 @@ class JsonIterator {
 class NullIterator : public JsonIterator {
   public:
     void first() override {
-        throw "NullIterator error";
+        /* throw "NullIterator error"; */
     }
 
     string currentKey() const override {
-        throw "NullIterator error";
+        /* throw "NullIterator error"; */
     }
 
     Value *currentValue() const override {
-        throw "NullIterator error";
+        /* throw "NullIterator error"; */
     }
 
     void next() override {
-        throw "NullIterator error";
+        /* throw "NullIterator error"; */
     }
 
     bool isDone() const override {
-        throw "NullIterator error";
+        /* throw "NullIterator error"; */
     }
 };
