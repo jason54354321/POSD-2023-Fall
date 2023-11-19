@@ -26,8 +26,8 @@ class CompositeSuite : public testing::Test {
 };
 
 TEST_F(CompositeSuite, composite) {
-    ASSERT_EQ("123", object->getValue("1")->toString());
-    ASSERT_EQ("456", object->getValue("2")->toString());
+    ASSERT_EQ("\"123\"", object->getValue("1")->toString());
+    ASSERT_EQ("\"456\"", object->getValue("2")->toString());
 }
 
 TEST_F(CompositeSuite, Iterator) {
@@ -35,12 +35,12 @@ TEST_F(CompositeSuite, Iterator) {
 
     it->first();
     ASSERT_EQ("1", it->currentKey());
-    ASSERT_EQ("123", it->currentValue()->toString());
+    ASSERT_EQ("\"123\"", it->currentValue()->toString());
     ASSERT_EQ(false, it->isDone());
 
     it->next();
     ASSERT_EQ("2", it->currentKey());
-    ASSERT_EQ("456", it->currentValue()->toString());
+    ASSERT_EQ("\"456\"", it->currentValue()->toString());
     ASSERT_EQ(false, it->isDone());
 
     it->next();

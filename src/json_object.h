@@ -4,6 +4,7 @@
 #include "value.h"
 #include "visitor.h"
 #include <map>
+#include <sstream>
 #include <string>
 
 class JsonObject : public Value {
@@ -46,6 +47,18 @@ class JsonObject : public Value {
     }
 
     string toString() override {
+        stringstream ss;
+        ss << "{\n";
+
+        int count = 0;
+        for (auto m : _map) {
+            count++;
+            ss << "\"" << m.first << "\":\"" << m.second << "\""
+               << "\n";
+            if (count < _map.size()) ss << ",";
+        }
+
+        ss << "\n}";
     }
 
     Value *getValue(string key) {

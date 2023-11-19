@@ -3,6 +3,7 @@
 #include "json_iterator.h"
 #include "value.h"
 #include "visitor.h"
+#include <sstream>
 
 class StringValue : public Value {
   private:
@@ -13,7 +14,10 @@ class StringValue : public Value {
     }
 
     string toString() override {
-        return _value;
+        stringstream ss;
+        ss << "\"" << _value << "\"";
+
+        return ss.str();
     }
 
     JsonIterator *createIterator() override {

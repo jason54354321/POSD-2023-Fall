@@ -49,9 +49,7 @@ class BeautifyVisitor : public JsonVisitor {
             StringValue *string_value = dynamic_cast<StringValue *>(it->currentValue());
             if (string_value) {
                 printKey(it);
-                _outString += "\"";
                 _outString += string_value->toString();
-                _outString += "\"";
                 if (counter < obj->getMapSize()) {
                     _outString += ",\n";
                 } else {
