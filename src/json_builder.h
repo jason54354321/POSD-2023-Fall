@@ -14,12 +14,14 @@ class JsonBuilder {
 
   public:
     void buildValue(std::string key, std::string value) {
+        cout << "building Value: " << key << "+" << value << endl;
         Value *stringValue = new StringValue(value);
 
         _stack.top()->set(key, stringValue);
     }
 
     void buildObject(std::string key) {
+        cout << "building Object: " << key << endl;
         if (key == "") {
             JsonObject *object = new JsonObject();
             _stack.push(object);
@@ -30,11 +32,13 @@ class JsonBuilder {
     }
 
     void endObject() {
+        cout << "ending Object: " << _stack.top() << endl;
         last_pop = _stack.top();
         _stack.pop();
     }
 
     JsonObject *getJsonObject() {
+        cout << "getJsonObject" << endl;
         JsonIterator *it = last_pop->createIterator();
         it->first();
         return dynamic_cast<JsonObject *>(it->currentValue());
