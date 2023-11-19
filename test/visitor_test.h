@@ -51,4 +51,14 @@ TEST(VisitorSuite, beautify_visitor) {
     home->accept(visitor);
 
     ASSERT_EQ(expected, visitor->getResult());
+
+    delete home;
+    delete jo_books;
+    delete jo_clean_code;
+    delete jo_design_patterns;
+    delete sv_clean;
+    delete sv_erich;
+    delete sv_design;
+    delete sv_robert;
+    delete visitor;
 }
