@@ -38,9 +38,10 @@ class JsonBuilder {
     }
 
     JsonObject *getJsonObject() {
-        cout << "getJsonObject" << last_pop << endl;
-        JsonIterator *it = last_pop->createIterator();
-        it->first();
-        return dynamic_cast<JsonObject *>(it->currentValue());
+        /* cout << "getJsonObject" << last_pop << endl; */
+        /* JsonIterator *it = last_pop->createIterator(); */
+        /* it->first(); */
+        /* return dynamic_cast<JsonObject *>(it->currentValue()); */
+        return last_pop;
     }
 };
