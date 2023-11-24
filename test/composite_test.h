@@ -51,6 +51,8 @@ TEST_F(CompositeSuite, Iterator) {
 
     it->next();
     ASSERT_EQ(true, it->isDone());
+
+    delete it;
 }
 
 TEST_F(CompositeSuite, NotExistedKey) {

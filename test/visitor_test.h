@@ -11,6 +11,9 @@ class VisitorSuite : public testing::Test {
     }
 };
 
+TEST(VisitorSuite, leak) {
+}
+
 TEST(VisitorSuite, beautify_visitor) {
     JsonObject *home = new JsonObject();
     JsonObject *jo_books = new JsonObject();

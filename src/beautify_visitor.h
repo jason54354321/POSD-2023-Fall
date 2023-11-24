@@ -73,6 +73,7 @@ class BeautifyVisitor : public JsonVisitor {
                 }
             }
         }
+        delete it;
     }
 
     void visitStringValue(StringValue *val) {
