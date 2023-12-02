@@ -1,12 +1,10 @@
 #pragma once
 
-#include <gtest/gtest.h>
+class Triangle;
+class Compound;
 
-class JsonObject;
-class StringValue;
-
-class JsonVisitor {
-  public:
-    virtual void visitJsonObject(JsonObject *obj) = 0;
-    virtual void visitStringValue(StringValue *val) = 0;
+class Visitor {
+public:
+    virtual void visitTriangle(Triangle * triangle) = 0;
+    virtual void visitCompound(Compound * compound) = 0;
 };

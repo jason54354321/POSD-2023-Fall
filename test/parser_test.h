@@ -1,74 +1,59 @@
-#include "../src/beautify_visitor.h"
-#include "../src/json_object.h"
-#include "../src/json_parser.h"
-#include "../src/string_value.h"
-#include "../src/visitor.h"
-#include <gtest/gtest.h>
+#include "../src/scanner.h"
+#include "../src/parser.h"
+#include "../src/builder.h"
 
-class ParserSuite : public testing::Test {
-  protected:
-    JsonObject *object;
-    StringValue *value1;
-    StringValue *value2;
+TEST(ParserSuite, ScannerOnTriangle){
+    Scanner * scanner = new Scanner();
+    scanner->setInput("triangle 1.0 1.0 1.0");
+    
+    ASSERT_EQ("triangle", scanner->nextToken());
+    ASSERT_EQ(1.0, scanner->nextDouble());
+    ASSERT_EQ(1.0, scanner->nextDouble());
+    ASSERT_EQ(1.0, scanner->nextDouble());
+    ASSERT_TRUE(scanner->isDone());
+}
 
-    void SetUp() override {
-        object = new JsonObject();
-        value1 = new StringValue("123");
-        value2 = new StringValue("456");
+TEST(ParserSuite, ParserOnTriangle){
+    Scanner *scanner = new Scanner();
+    Builder * builder = new Builder();
+    Parser *parser = new Parser(scanner, builder);
+    parser->setInput("triangle 1.0 1.0 1.0");
+    parser->parse();
+    std::list<Shape *> shapes = parser->getShapes();
+    ASSERT_EQ(3.0, shapes.front()->perimeter());
+}
 
-        object->set("1", value1);
-        object->set("2", value2);
-    }
-
-    void TearDown() override {
-        delete object;
-        delete value1;
-        delete value2;
-    }
-};
-
-TEST_F(ParserSuite, parser) {
-    JsonScanner *scanner = new JsonScanner();
-    JsonBuilder *builder = new JsonBuilder();
-    JsonParser *parser = new JsonParser(scanner, builder);
-
-    string input = "{\"books\": {"
-                   "\"design patterns\": {"
-                   "\"name\": \"Design Patterns: Elements of Reusable Object-Oriented Software\","
-                   "\"author\": \"Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides\""
-                   "},"
-                   "\"clean code\": {"
-                   "\"name\": \"Clean Code\","
-                   "\"author\": \"Robert C. Martin\""
-                   "}"
-                   "}}";
-
+TEST(ParserSuite, ParserOnCompoundOfTwoTriangles) {
+    std::string input = "compound {\n  triangle 2.0 2.0 2.0\n  triangle 3.0 3.0 3.0\n}";
+    Scanner *scanner = new Scanner();
+    Builder * builder = new Builder();
+    Parser *parser = new Parser(scanner, builder);
     parser->setInput(input);
     parser->parse();
+    std::list<Shape *>shapes = parser->getShapes();
+    ASSERT_EQ(15.0, shapes.front()->perimeter());
+}
 
-    JsonObject *object = parser->getJsonObject();
-    BeautifyVisitor *visitor = new BeautifyVisitor();
-    object->accept(visitor);
+TEST(ParserSuite, ParserOnTestData) {
+    std::string input = "compound {\n  triangle 1.0 1.0 1.0\n  compound {\n    triangle 2.0 2.0 2.0\n    triangle 3.0 3.0 3.0\n  }\n}\ntriangle 4.0 4.0 4.0";
+    Scanner * scanner = new Scanner();
+    Builder * builder = new Builder();
+    Parser * parser = new Parser(scanner, builder);
+    parser->setInput(input);
+    parser->parse();
+    std::list<Shape *> shapes = parser->getShapes();
+    ASSERT_EQ(18.0, shapes.front()->perimeter());
+    ASSERT_EQ(12.0, shapes.back()->perimeter());
+}
 
-    string expected = "{\n\
-    \"books\": {\n\
-        \"clean code\": {\n\
-            \"author\": \"Robert C. Martin\",\n\
-            \"name\": \"Clean Code\"\n\
-        },\n\
-        \"design patterns\": {\n\
-            \"author\": \"Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides\",\n\
-            \"name\": \"Design Patterns: Elements of Reusable Object-Oriented Software\"\n\
-        }\n\
-    }\n\
-}";
-
-    string result = visitor->getResult();
-    EXPECT_EQ(expected, result);
-
-    delete visitor;
-    delete object;
-    delete scanner;
-    delete builder;
-    delete parser;
+TEST(ParserSuite, ParserWithBuilder) {
+    std::string input = "compound {\n  triangle 1.0 1.0 1.0\n  compound {\n    triangle 2.0 2.0 2.0\n    triangle 3.0 3.0 3.0\n  }\n}\ntriangle 4.0 4.0 4.0";
+    Scanner * scanner = new Scanner();
+    Builder * builder = new Builder();
+    Parser * parser = new Parser(scanner, builder);
+    parser->setInput(input);
+    parser->parse();
+    std::list<Shape *> shapes = builder->getShapes();
+    ASSERT_EQ(18.0, shapes.front()->perimeter());
+    ASSERT_EQ(12.0, shapes.back()->perimeter());
 }
