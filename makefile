@@ -1,6 +1,6 @@
 .phony: clean stat
 
-FLAGS = -std=c++11 -Wfatal-errors -Wall
+FLAGS = -g -std=c++11 -Wfatal-errors -Wall
 OBJ = obj/shape_iterator.o obj/unit_of_work.o obj/drawing_mapper.o obj/painter_mapper.o
 SRC = src/abstract_mapper.h src/parser.h src/builder.h src/scanner.h src/domain_object.h src/drawing.h src/painter.h src/iterator_factory.h src/shape_iterator_factory.h src/shape.h src/triangle.h src/visitor.h
 TEST = test/ut.cpp test/db_test.h test/parser_test.h

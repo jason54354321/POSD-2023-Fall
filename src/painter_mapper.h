@@ -17,13 +17,13 @@ public:
 
     void del(std::string id);
 
-    std::string updateStmt(DomainObject * domainObject) const;
+    std::string updateStmt(DomainObject * domainObject) const override;
 
-    std::string findByIdStmt(std::string id) const;
+    std::string findByIdStmt(std::string id) const override;
 
-    std::string addStmt(DomainObject * domainObject) const;
+    std::string addStmt(DomainObject * domainObject) const override;
 
-    std::string deleteByIdStmt(std::string id) const;
+    std::string deleteByIdStmt(std::string id) const override;
 
     static PainterMapper* instance();
 
