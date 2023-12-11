@@ -186,7 +186,12 @@ TEST_F(DBSuite, modifyDrawing) {
 
     ASSERT_FALSE(UnitOfWork::instance()->inDirty("d_0001"));
     ASSERT_TRUE(UnitOfWork::instance()->inClean("d_0001"));
+
+    ASSERT_FALSE(UnitOfWork::instance()->inDirty("p_0002"));
+    ASSERT_TRUE(UnitOfWork::instance()->inClean("p_0002"));
+
     ASSERT_EQ("p_0002", drawing->painter()->id());
+    ASSERT_EQ("Mary", drawing->painter()->name());
 }
 
 TEST_F(DBSuite, ClientNewPainter) {
