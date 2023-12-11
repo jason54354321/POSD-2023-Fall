@@ -16,7 +16,7 @@ UnitOfWork * UnitOfWork::instance() {
 }
 
 void UnitOfWork::registerNew(DomainObject * domainObject) {
-
+    _new[domainObject->id()] = domainObject;
 }
 
 void UnitOfWork::registerClean(DomainObject * domainObject) {
@@ -25,7 +25,8 @@ void UnitOfWork::registerClean(DomainObject * domainObject) {
 }
 
 void UnitOfWork::registerDirty(DomainObject * domainObject) {
-
+    _dirty[domainObject->id()] = domainObject;
+    _clean.erase(domainObject->id());
 }
 
 void UnitOfWork::registerDeleted(DomainObject * domainObject) {
@@ -46,6 +47,33 @@ bool UnitOfWork::inDirty(std::string id) const {
 
 bool UnitOfWork::inDeleted(std::string id) const {
     return _deleted.count(id);
+}
+
+void UnitOfWork::commit() {
+    for (auto pair: _dirty) {
+        if (dynamic_cast<Painter *>(pair.second)) {
+            PainterMapper::instance()->update(pair.first);
+            UnitOfWork::instance()->registerClean(pair.second);
+        }
+        if (dynamic_cast<Drawing *>(pair.second)) {
+            DrawingMapper::instance()->update(pair.first);
+            UnitOfWork::instance()->registerClean(pair.second);
+        }
+    }
+    _dirty.clear();
+
+    for (auto pair: _new) {
+        if (dynamic_cast<Painter *>(pair.second)) {
+            PainterMapper::instance()->add(pair.second);
+            UnitOfWork::instance()->registerClean(pair.second);
+        }
+        if (dynamic_cast<Drawing *>(pair.second)) {
+            DrawingMapper::instance()->add(pair.second);
+            UnitOfWork::instance()->registerClean(pair.second);
+        }
+    }
+    _new.clear();
+
 }
 
 UnitOfWork::UnitOfWork() {

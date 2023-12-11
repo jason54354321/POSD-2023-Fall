@@ -17,11 +17,11 @@ Drawing *DrawingMapper::find(std::string id)
 }
 
 void DrawingMapper::add(DomainObject * Painter){
-
+    abstractAdd(Painter);
 }
 
 void DrawingMapper::update(std::string id){
-
+    abstractUpdate(getDomainObject(id));
 }
 
 void DrawingMapper::del(std::string id){
@@ -29,10 +29,21 @@ void DrawingMapper::del(std::string id){
 }
 
 std::string DrawingMapper::updateStmt(DomainObject * domainObject) const {
-
+    Drawing* drawing = static_cast<Drawing*>(domainObject);
+    std::string stmt = "UPDATE drawing SET painter='" + drawing->painter()->id() + "', shapes= '" + drawing->getShapesAsString() + "' WHERE DrawingID='" + drawing->id() + "'";
+    return stmt;
 }
 
 std::string DrawingMapper::addStmt(DomainObject * domainObject) const {
+    Drawing* drawing = static_cast<Drawing*>(domainObject);
+
+    
+    std::string stmt = "INSERT INTO drawing"
+                        "(ID, painter, shapes)"
+                        "values"
+                        "('" + drawing->id() + "', '" + drawing->painter()->id() + "', '" + drawing->getShapesAsString() + "')";
+
+    return stmt;
 
 }
 

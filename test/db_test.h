@@ -5,6 +5,9 @@
 #include <list>
 #include <memory>
 #include "../src/unit_of_work.h"
+#include "../src/scanner.h"
+#include "../src/builder.h"
+#include "../src/parser.h"
 #include "../src/drawing_mapper.h"
 #include "../src/painter_mapper.h"
 #include "../src/drawing.h"
@@ -147,4 +150,93 @@ TEST_F(DBSuite, findDrawing)
     ASSERT_EQ(drawing->getShape(0)->perimeter(), 3);
     ASSERT_EQ(drawing->painter()->id(), "p_0001");
     ASSERT_EQ(drawing->painter()->name(), "Patrick");
+}
+
+TEST_F(DBSuite, modifyPainterName) {
+    Painter *painter = pm->find("p_0001");
+
+    painter->setName("Jason");
+
+    ASSERT_TRUE(UnitOfWork::instance()->inDirty("p_0001"));
+    ASSERT_FALSE(UnitOfWork::instance()->inClean("p_0001"));
+
+    UnitOfWork::instance()->commit();
+    ASSERT_FALSE(UnitOfWork::instance()->inDirty("p_0001"));
+    ASSERT_TRUE(UnitOfWork::instance()->inClean("p_0001"));
+
+    painter = pm->find("p_0001");
+    ASSERT_EQ("Jason", painter->name());
+}
+
+TEST_F(DBSuite, modifyDrawing) {
+    Drawing *drawing = dm->find("d_0001");
+    ASSERT_EQ("p_0001", drawing->painter()->id());
+
+    Painter *painter = pm->find("p_0002");
+    drawing->setPainter(painter);
+
+    ASSERT_FALSE(UnitOfWork::instance()->inDirty("p_0002"));
+    ASSERT_TRUE(UnitOfWork::instance()->inClean("p_0002"));
+
+    ASSERT_TRUE(UnitOfWork::instance()->inDirty("d_0001"));
+    ASSERT_FALSE(UnitOfWork::instance()->inClean("d_0001"));
+
+    UnitOfWork::instance()->commit();
+    drawing = dm->find("d_0001");
+
+    ASSERT_FALSE(UnitOfWork::instance()->inDirty("d_0001"));
+    ASSERT_TRUE(UnitOfWork::instance()->inClean("d_0001"));
+    ASSERT_EQ("p_0002", drawing->painter()->id());
+}
+
+TEST_F(DBSuite, ClientNewPainter) {
+    Painter *painter = new Painter("p_0003", "Jason");
+    UnitOfWork::instance()->registerNew(painter);
+
+    ASSERT_TRUE(UnitOfWork::instance()->inNew("p_0003"));
+    ASSERT_FALSE(UnitOfWork::instance()->inClean("p_0003"));
+    ASSERT_FALSE(UnitOfWork::instance()->inDirty("p_0003"));
+
+    UnitOfWork::instance()->commit();
+    ASSERT_FALSE(UnitOfWork::instance()->inNew("p_0003"));
+    ASSERT_TRUE(UnitOfWork::instance()->inClean("p_0003"));
+    ASSERT_FALSE(UnitOfWork::instance()->inDirty("p_0003"));
+
+}
+
+TEST_F(DBSuite, ClientNewDrawing) {
+    Painter *painter = new Painter("p_0004", "Jason");
+    UnitOfWork::instance()->registerNew(painter);
+
+
+    std::string shapes_string = "triangle 3 3 3";
+
+    Scanner *scanner = new Scanner();
+    Builder *builder = new Builder();
+    Parser *parser = new Parser(scanner, builder);
+
+    parser->setInput(shapes_string);
+    parser->parse();
+    Drawing *drawing = new Drawing("d_0004", painter, parser->getShapes());
+    UnitOfWork::instance()->registerNew(drawing);
+
+    ASSERT_TRUE(UnitOfWork::instance()->inNew("d_0004"));
+    ASSERT_FALSE(UnitOfWork::instance()->inClean("d_0004"));
+    ASSERT_FALSE(UnitOfWork::instance()->inDirty("d_0004"));
+
+    ASSERT_TRUE(UnitOfWork::instance()->inNew("p_0004"));
+    ASSERT_FALSE(UnitOfWork::instance()->inClean("p_0004"));
+    ASSERT_FALSE(UnitOfWork::instance()->inDirty("p_0004"));
+
+    UnitOfWork::instance()->commit();
+    ASSERT_FALSE(UnitOfWork::instance()->inNew("d_0004"));
+    ASSERT_TRUE(UnitOfWork::instance()->inClean("d_0004"));
+    ASSERT_FALSE(UnitOfWork::instance()->inDirty("d_0004"));
+    ASSERT_EQ("d_0004", dm->find("d_0004")->id());
+    ASSERT_EQ("Jason", dm->find("d_0004")->painter()->name());
+
+    ASSERT_FALSE(UnitOfWork::instance()->inNew("p_0004"));
+    ASSERT_TRUE(UnitOfWork::instance()->inClean("p_0004"));
+    ASSERT_FALSE(UnitOfWork::instance()->inDirty("p_0004"));
+    ASSERT_EQ("p_0004", pm->find("p_0004")->id());
 }

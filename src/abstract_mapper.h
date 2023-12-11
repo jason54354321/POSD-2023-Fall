@@ -65,11 +65,11 @@ protected:
     }
 
     void abstractAdd(DomainObject *domainObject) {
-        // TODO: 
+        sqlite3_exec(_db, addStmt(domainObject).c_str(), NULL, NULL, &_errorMessage);
     }
 
     void abstractUpdate(DomainObject *domainObject) {
-
+        sqlite3_exec(_db, updateStmt(domainObject).c_str(), NULL, NULL, &_errorMessage);
     }
 
     void abstractDelete(std::string id) {
