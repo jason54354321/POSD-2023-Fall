@@ -164,6 +164,8 @@ TEST_F(DBSuite, modifyPainterName) {
     ASSERT_FALSE(UnitOfWork::instance()->inDirty("p_0001"));
     ASSERT_TRUE(UnitOfWork::instance()->inClean("p_0001"));
 
+    pm->cleanCache();
+
     painter = pm->find("p_0001");
     ASSERT_EQ("Jason", painter->name());
 }
@@ -182,13 +184,15 @@ TEST_F(DBSuite, modifyDrawing) {
     ASSERT_FALSE(UnitOfWork::instance()->inClean("d_0001"));
 
     UnitOfWork::instance()->commit();
-    drawing = dm->find("d_0001");
 
     ASSERT_FALSE(UnitOfWork::instance()->inDirty("d_0001"));
     ASSERT_TRUE(UnitOfWork::instance()->inClean("d_0001"));
 
     ASSERT_FALSE(UnitOfWork::instance()->inDirty("p_0002"));
     ASSERT_TRUE(UnitOfWork::instance()->inClean("p_0002"));
+
+    dm->cleanCache();
+    drawing = dm->find("d_0001");
 
     ASSERT_EQ("p_0002", drawing->painter()->id());
     ASSERT_EQ("Mary", drawing->painter()->name());
@@ -244,4 +248,39 @@ TEST_F(DBSuite, ClientNewDrawing) {
     ASSERT_TRUE(UnitOfWork::instance()->inClean("p_0004"));
     ASSERT_FALSE(UnitOfWork::instance()->inDirty("p_0004"));
     ASSERT_EQ("p_0004", pm->find("p_0004")->id());
+}
+
+TEST_F(DBSuite, deletePainter) {
+    Painter *painter = pm->find("p_0001");
+    ASSERT_TRUE(UnitOfWork::instance()->inClean("p_0001"));
+
+    UnitOfWork::instance()->registerDeleted(painter);
+
+    ASSERT_TRUE(UnitOfWork::instance()->inDeleted("p_0001"));
+    ASSERT_FALSE(UnitOfWork::instance()->inClean("p_0001"));
+
+    UnitOfWork::instance()->commit();
+
+    ASSERT_FALSE(UnitOfWork::instance()->inDeleted("p_0001"));
+    ASSERT_TRUE(UnitOfWork::instance()->inClean("p_0001"));
+
+    ASSERT_EQ(nullptr, pm->find("p_0001"));
+    
+}
+
+TEST_F(DBSuite, deleteDrawing) {
+    Drawing *drawing = dm->find("d_0001");
+    ASSERT_TRUE(UnitOfWork::instance()->inClean("d_0001"));
+
+    UnitOfWork::instance()->registerDeleted(drawing);
+
+    ASSERT_TRUE(UnitOfWork::instance()->inDeleted("d_0001"));
+    ASSERT_FALSE(UnitOfWork::instance()->inClean("d_0001"));
+
+    UnitOfWork::instance()->commit();
+
+    ASSERT_FALSE(UnitOfWork::instance()->inDeleted("d_0001"));
+    ASSERT_TRUE(UnitOfWork::instance()->inClean("d_0001"));
+
+    ASSERT_EQ(nullptr, pm->find("d_0001"));
 }

@@ -73,7 +73,8 @@ protected:
     }
 
     void abstractDelete(std::string id) {
-
+        sqlite3_exec(_db, deleteByIdStmt(id).c_str(), NULL, NULL, &_errorMessage);
+        _domainObjects.erase(id);
     }
 
     void load(DomainObject *domainObject) {

@@ -25,7 +25,7 @@ void PainterMapper::update(std::string id){
 }
 
 void PainterMapper::del(std::string id){
-
+    abstractDelete(id);
 }
 
 std::string PainterMapper::updateStmt(DomainObject * domainObject) const {
@@ -46,11 +46,12 @@ std::string PainterMapper::addStmt(DomainObject * domainObject) const {
                          "values"
                          "('" + painter->id() + "', '" + painter->name() + "')";
     return stmt;
-
 }
 
 std::string PainterMapper::deleteByIdStmt(std::string id) const {
-
+    Painter* painter = static_cast<Painter*>(_domainObjects.at(id));
+    std::string stmt = "DELETE FROM painter WHERE ID='" + id + "'";
+    return stmt;
 }
 
 PainterMapper* PainterMapper::instance() {

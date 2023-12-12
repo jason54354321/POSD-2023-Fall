@@ -26,12 +26,12 @@ void DrawingMapper::update(std::string id){
 }
 
 void DrawingMapper::del(std::string id){
-
+    abstractDelete(id);
 }
 
 std::string DrawingMapper::updateStmt(DomainObject * domainObject) const {
     Drawing* drawing = static_cast<Drawing*>(domainObject);
-    std::string stmt = "UPDATE drawing SET painter='" + drawing->painter()->id() + "', shapes= '" + drawing->getShapesAsString() + "' WHERE DrawingID='" + drawing->id() + "'";
+    std::string stmt = "UPDATE drawing SET painter='" + drawing->painter()->id() + "', shapes= '" + drawing->getShapesAsString() + "' WHERE ID='" + drawing->id() + "'";
     return stmt;
 }
 
@@ -49,7 +49,9 @@ std::string DrawingMapper::addStmt(DomainObject * domainObject) const {
 }
 
 std::string DrawingMapper::deleteByIdStmt(std::string id) const {
-
+    Drawing* painter = static_cast<Drawing*>(_domainObjects.at(id));
+    std::string stmt = "DELETE FROM drawing WHERE ID='" + id + "'";
+    return stmt;
 }
 
 std::string DrawingMapper::findByIdStmt(std::string id) const
