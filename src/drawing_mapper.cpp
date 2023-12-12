@@ -48,7 +48,6 @@ std::string DrawingMapper::addStmt(DomainObject * domainObject) const {
 }
 
 std::string DrawingMapper::deleteByIdStmt(std::string id) const {
-    std::cout << "delete by ID:" << id << std::endl;
     Drawing* painter = static_cast<Drawing*>(_domainObjects.at(id));
     std::string stmt = "DELETE FROM drawing WHERE ID='" + id + "'";
     return stmt;
