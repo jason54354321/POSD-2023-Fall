@@ -17,6 +17,7 @@ Drawing *DrawingMapper::find(std::string id)
 }
 
 void DrawingMapper::add(DomainObject * Painter){
+    system("cat test/db_test.h");
     abstractAdd(Painter);
 }
 
@@ -71,12 +72,7 @@ int DrawingMapper::callback(void* notUsed, int argc, char** argv, char** colName
     Painter *painter = PainterMapper::instance()->find(argv[1]);
 
     // build shapes
-    Scanner *scanner = new Scanner();
-    Builder * builder = new Builder();
-    Parser *parser = new Parser(scanner, builder);
-    parser->setInput(argv[2]);
-    parser->parse();
-    std::list<Shape *>shapes = parser->getShapes();
+    std::list<Shape *>shapes = DrawingMapper::instance()->convertShapes(argc, argv);
 
     Drawing *drawing = new Drawing(argv[0], painter, shapes);
 
