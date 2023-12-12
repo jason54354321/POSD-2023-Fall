@@ -284,3 +284,22 @@ TEST_F(DBSuite, deleteDrawing) {
 
     ASSERT_EQ(nullptr, pm->find("d_0001"));
 }
+
+TEST_F(DBSuite, deleteWithoutCommit)
+{
+
+    UnitOfWork *uow = UnitOfWork::instance();
+
+    Painter *p = new Painter("p_0999", "Jason");
+    uow->registerNew(p);
+    ASSERT_TRUE(UnitOfWork::instance()->inNew(p->id()));
+    ASSERT_FALSE(UnitOfWork::instance()->inDirty(p->id()));
+    ASSERT_FALSE(UnitOfWork::instance()->inClean(p->id()));
+    ASSERT_FALSE(UnitOfWork::instance()->inDeleted(p->id()));
+
+    uow->registerDeleted(p);
+    ASSERT_FALSE(UnitOfWork::instance()->inNew(p->id()));
+    ASSERT_FALSE(UnitOfWork::instance()->inDirty(p->id()));
+    ASSERT_FALSE(UnitOfWork::instance()->inClean(p->id()));
+    ASSERT_FALSE(UnitOfWork::instance()->inDeleted(p->id()));
+}
