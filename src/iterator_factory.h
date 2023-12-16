@@ -1,8 +1,10 @@
 #pragma once
 
-class ShapeIterator;
+#include "iterator.h"
+
+class Folder;
 
 class IteratorFactory {
 public:
-    virtual ShapeIterator * create() = 0;
+    virtual Iterator * create(Folder * node, int operationCount) = 0;
 };

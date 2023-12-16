@@ -1,34 +1,20 @@
-.phony: clean stat
+.PHONY: clean dirs
 
-FLAGS = -g -std=c++11 -Wfatal-errors -Wall
-OBJ = obj/shape_iterator.o obj/unit_of_work.o obj/drawing_mapper.o obj/painter_mapper.o
-SRC = src/abstract_mapper.h src/parser.h src/builder.h src/scanner.h src/domain_object.h src/drawing.h src/painter.h src/iterator_factory.h src/shape_iterator_factory.h src/shape.h src/triangle.h src/visitor.h
-TEST = test/ut.cpp test/db_test.h test/parser_test.h
+CFLAGS = -std=c++11 -Wfatal-errors -Wall 
+LIBS = -lgtest -lpthread
 
-all: dir u_test 
+UT_ALL = test/ut_all.cpp
+TEST_HEADERS = test/ut_iterator.h test/ut_file.h test/ut_folder.h test/ut_node.h test/ut_visitor.h test/ut_tree_visitor.h test/ut_file_system_builder.h
 
-u_test: $(SRC) $(TEST) $(OBJ)
-	g++ $(FLAGS) test/ut.cpp $(OBJ) -o bin/ut_all -lsqlite3 -lgtest -lpthread
+SRC_HEADERS = src/file.h src/folder.h src/node.h src/iterator.h src/null_iterator.h src/dfs_iterator.h src/visitor.h src/find_by_name_visitor.h src/stream_out_visitor.h src/order_by.h src/tree_visitor.h src/file_system_builder.h src/file_system_parser.h src/file_system_scanner.h 
 
-obj/shape_iterator.o: src/shape_iterator.h src/shape_iterator.cpp
-	g++ $(FLAGS) -c src/shape_iterator.cpp -o obj/shape_iterator.o
+all: dirs bin/ut_all
 
-obj/unit_of_work.o: src/unit_of_work.h src/unit_of_work.cpp
-	g++ $(FLAGS) -c src/unit_of_work.cpp -o obj/unit_of_work.o
-
-obj/drawing_mapper.o: src/drawing_mapper.h src/drawing_mapper.cpp
-	g++ $(FLAGS) -c src/drawing_mapper.cpp -o obj/drawing_mapper.o
-
-obj/painter_mapper.o: src/painter_mapper.h src/painter_mapper.cpp
-	g++ $(FLAGS) -c src/painter_mapper.cpp -o obj/painter_mapper.o
-
-dir:
-	mkdir -p bin
-	mkdir -p obj
-	mkdir -p resource
+bin/ut_all: $(UT_ALL) $(TEST_HEADERS) $(SRC_HEADERS)
+	g++ $(CFLAGS) -o $@ $<  $(LIBS) 
 
 clean:
-	rm -f bin/* obj/*.o resource/*.db
+	rm -rf bin obj
 
-stat:
-	wc -l src/* test/*.h test/*.cpp
+dirs:
+	mkdir -p bin obj
