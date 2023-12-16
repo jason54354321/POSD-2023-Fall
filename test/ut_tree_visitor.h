@@ -1,5 +1,7 @@
+#include <gtest/gtest.h>
 #include "../src/tree_visitor.h"
 #include "../src/order_by.h"
+#include "../src/iterator_factories.h"
 
 #include <iostream>
 
@@ -98,11 +100,14 @@ TEST_F(TreeVisitorTest, OrderByName) {
     "├── hello.txt\n"
     "└── my_profile\n";
 
-    TreeVisitor * tree = new TreeVisitor(OrderBy::Name);
+    IteratorFactory *factory = new OrderByNameIteratorFactory();
+
+    TreeVisitor * tree = new TreeVisitor(factory);
     home->accept(tree);
     string result = tree->getTree();
 
     ASSERT_EQ(expected, result);
+
 
     delete tree;
 }
@@ -126,7 +131,9 @@ TEST_F(TreeVisitorTest, OrderByNameWithFolderFirst) {
     "├── hello.txt\n"
     "└── my_profile\n";
 
-    TreeVisitor * tree = new TreeVisitor(OrderBy::NameWithFolderFirst);
+    IteratorFactory *factory = new OrderByNameWithFolderFirstIteratorFactory();
+
+    TreeVisitor * tree = new TreeVisitor(factory);
     home->accept(tree);
     string result = tree->getTree();
 
@@ -153,7 +160,9 @@ TEST_F(TreeVisitorTest, OrderByKind) {
     "│   └── funny.png\n"
     "└── hello.txt\n";
 
-    TreeVisitor * tree = new TreeVisitor(OrderBy::Kind);
+    IteratorFactory *factory = new OrderByKindIteratorFactory();
+
+    TreeVisitor * tree = new TreeVisitor(factory);
     home->accept(tree);
     string result = tree->getTree();
 

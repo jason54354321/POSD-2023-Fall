@@ -7,6 +7,7 @@
 #include "order_by.h"
 
 using namespace std;
+class IteratorFactory;
 
 class Node {
 private:
@@ -50,7 +51,11 @@ public:
 
     virtual int numberOfFiles() const = 0;
 
-    virtual Iterator * createIterator(OrderBy orderBy=OrderBy::Normal) {
+    virtual Iterator * createIterator() {
+        return new NullIterator();
+    }
+
+    virtual Iterator * createIterator(IteratorFactory * factory) {
         return new NullIterator();
     }
 

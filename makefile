@@ -1,6 +1,6 @@
 .PHONY: clean dirs
 
-CFLAGS = -std=c++11 -Wfatal-errors -Wall 
+CFLAGS = -g -std=c++11 -Wfatal-errors -Wall 
 LIBS = -lgtest -lpthread
 
 UT_ALL = test/ut_all.cpp

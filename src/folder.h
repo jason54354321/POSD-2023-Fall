@@ -7,6 +7,7 @@
 #include "iterator.h"
 #include "dfs_iterator.h"
 #include "order_by.h"
+#include "iterator_factory.h"
 
 #include <iostream>
 
@@ -65,18 +66,26 @@ public:
         return num;
     }
 
-    Iterator * createIterator(OrderBy orderBy=OrderBy::Normal) override {
-        switch (orderBy) {
-            case OrderBy::Name :
-                return new OrderByNameIterator(this, _operationCount);
-            case OrderBy::NameWithFolderFirst :
-                return new OrderByNameWithFolderFirstIterator(this, _operationCount);
-            case OrderBy::Kind :
-                return new OrderByKindIterator(this, _operationCount);
-            case OrderBy::Normal: 
-            default:
-                return new FolderIterator(this, _operationCount);
-        }
+    // Iterator * createIterator(OrderBy orderBy=OrderBy::Normal) override {
+    //     switch (orderBy) {
+    //         case OrderBy::Name :
+    //             return new OrderByNameIterator(this, _operationCount);
+    //         case OrderBy::NameWithFolderFirst :
+    //             return new OrderByNameWithFolderFirstIterator(this, _operationCount);
+    //         case OrderBy::Kind :
+    //             return new OrderByKindIterator(this, _operationCount);
+    //         case OrderBy::Normal: 
+    //         default:
+    //             return new FolderIterator(this, _operationCount);
+    //     }
+    // }
+
+    Iterator * createIterator() override {
+        return new FolderIterator(this, _operationCount);
+    }
+
+    Iterator * createIterator(IteratorFactory * factory) override {
+        return factory->create(this, _operationCount);
     }
 
     Node * find(string path) override {

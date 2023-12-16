@@ -1,3 +1,4 @@
+#include <gtest/gtest.h>
 #include <string>
 #include "../src/folder.h"
 

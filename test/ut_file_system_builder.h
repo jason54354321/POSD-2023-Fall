@@ -1,3 +1,4 @@
+#include <gtest/gtest.h>
 #include "../src/node.h"
 #include "../src/folder.h"
 #include "../src/file.h"
@@ -5,6 +6,8 @@
 #include "../src/file_system_builder.h"
 #include "../src/file_system_parser.h"
 #include "../src/file_system_scanner.h"
+#include "../src/iterator_factory.h"
+#include "../src/iterator_factories.h"
 
 TEST(FileSystemBuilder, Normal) {
     FileSystemParser * parser = new FileSystemParser(new FileSystemBuilder());
@@ -13,7 +16,9 @@ TEST(FileSystemBuilder, Normal) {
 
     Node * home = parser->getRoot();
 
-    Iterator * it = home->createIterator(OrderBy::Name);
+    IteratorFactory * factory = new OrderByNameIteratorFactory();
+
+    Iterator * it = home->createIterator(factory);
     it->first();
     ASSERT_FALSE(it->isDone());
     

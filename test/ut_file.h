@@ -1,3 +1,4 @@
+#include <gtest/gtest.h>
 #include "../src/file.h"
 
 TEST(File, normal) {
