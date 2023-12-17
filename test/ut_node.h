@@ -113,3 +113,27 @@ TEST_F(NodeTest, find_folder_by_name_not_exist) {
     ASSERT_EQ(0, result.size());
 }
 
+TEST_F(NodeTest, rename_file) {
+    profile->rename("newName.txt");
+
+    ASSERT_EQ("newName.txt", profile->name());
+
+    Iterator *it = home->createIterator();
+    it->first();
+    ASSERT_EQ("newName.txt", it->currentItem()->name());
+}
+
+TEST_F(NodeTest, rename_folder) {
+    home->rename("newName");
+
+    ASSERT_EQ("newName", home->name());
+
+    ASSERT_EQ("structure/newName/my_profile", profile->path());
+    ASSERT_EQ("structure/newName/Downloads", download->path());
+    ASSERT_EQ("structure/newName/Documents", document->path());
+    ASSERT_EQ("structure/newName/Documents/note.txt", note->path());
+    ASSERT_EQ("structure/newName/Documents/favorites", favorite->path());
+    ASSERT_EQ("structure/newName/Documents/favorites/domain-driven-design.pdf", ddd->path());
+    ASSERT_EQ("structure/newName/Documents/favorites/clean-architecture.pdf", ca->path());
+    ASSERT_EQ("structure/newName/Documents/favorites/cqrs.pdf", cqrs->path());
+}

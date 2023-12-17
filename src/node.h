@@ -11,13 +11,13 @@ class IteratorFactory;
 
 class Node {
 private:
-    string _path;
-    Node * _parent;
 protected:
 
     Node(string path): _path(path) {}
 
 public:
+    string _path;
+    Node * _parent;
     virtual ~Node() {}
 
     Node * parent() {
@@ -44,6 +44,18 @@ public:
     virtual void add(Node * node) {
         throw string("This node does not support adding sub node");
     }
+
+    void rename(std::string name) {
+        // update node's name
+        std::string old_name = this->name();
+
+        _path = _path.replace(_path.find(old_name), old_name.size(), name);
+
+        // updating the children's paths accordingly
+        renameAllChild(old_name, name);
+    }
+
+    virtual void renameAllChild(std::string old_name, std::string name) = 0;
 
     virtual Node * getChildByName(const char * name) const {
         return nullptr;

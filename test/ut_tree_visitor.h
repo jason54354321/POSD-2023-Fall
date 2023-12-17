@@ -170,3 +170,35 @@ TEST_F(TreeVisitorTest, OrderByKind) {
 
     delete tree;
 }
+
+TEST_F(TreeVisitorTest, OrderByKind_WithRename) {
+    string expected = 
+    ".\n"
+    "├── Documents\n"
+    "│   ├── programming\n"
+    "│   │   ├── oop.pdf\n"
+    "│   │   ├── cpp.pub\n"
+    "│   │   └── python.pub\n"
+    "│   ├── clean-architecture.pdf\n"
+    "│   ├── object-oriented-analysis-and-design.pdf\n"
+    "│   ├── domain-driven-design.pub\n"
+    "│   ├── hello.txt\n"
+    "│   └── note.txt\n"
+    "├── Downloads\n"
+    "│   └── funny.png\n"
+    "├── hello.txt\n"
+    "└── newName.txt\n";
+
+    // rename
+    profile->rename("newName.txt");
+
+    IteratorFactory *factory = new OrderByKindIteratorFactory();
+
+    TreeVisitor * tree = new TreeVisitor(factory);
+    home->accept(tree);
+    string result = tree->getTree();
+
+    ASSERT_EQ(expected, result);
+
+    delete tree;
+}

@@ -26,6 +26,10 @@ public:
         return nullptr;
     }
 
+    virtual void renameAllChild(std::string old_name, std::string name) override {
+        return;
+    }
+
     std::list<string> findByName(string name) override {
         std::list<string> pathList;
         if (this->name() == name) {
