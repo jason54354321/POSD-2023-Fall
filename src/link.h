@@ -2,7 +2,7 @@
 
 #include <string>
 #include <list>
-#include <test/../src/Node.h>
+#include "node.h"
 
 using namespace std;
 
