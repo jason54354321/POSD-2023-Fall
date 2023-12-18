@@ -55,7 +55,9 @@ public:
         renameAllChild(old_name, name);
     }
 
-    virtual void renameAllChild(std::string old_name, std::string name) = 0;
+    virtual void renameAllChild(std::string old_name, std::string name) {
+        return;
+    }
 
     virtual Node * getChildByName(const char * name) const {
         return nullptr;
