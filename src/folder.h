@@ -411,6 +411,11 @@ public:
                 return "folder";
             }
 
+            const Link * link = dynamic_cast<const Link *>(node);
+            if (link) {
+                return "link";
+            }
+
             std::size_t pos = node->name().rfind(".");
             if (pos == std::string::npos) {
                 return "file";
