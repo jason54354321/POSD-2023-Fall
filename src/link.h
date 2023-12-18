@@ -14,7 +14,7 @@ private:
 
 public:
     Link(string path, Node *node): _path(path), _node(node), Node(path) {
-        system("cat test/ut_iterator.h");
+        // system("cat test/ut_iterator.h");
     }
 
     int numberOfFiles() const override {
@@ -46,6 +46,6 @@ public:
     }
 
     Node * getTarget() {
-
+        return _node;
     }
 };
