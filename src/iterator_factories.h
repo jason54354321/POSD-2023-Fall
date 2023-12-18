@@ -27,16 +27,34 @@ public:
 };
 
 class OrderByNameWithFolderFirstIteratorFactory: public IteratorFactory {
+private:
+    static OrderByNameWithFolderFirstIteratorFactory *_instance;
 public:
     Iterator *create(Folder *folder, int operationCount) override {
         return new Folder::OrderByNameWithFolderFirstIterator(folder, operationCount);
 
     }
+
+    static OrderByNameWithFolderFirstIteratorFactory *instance() {
+        if (_instance == nullptr) {
+            _instance = new OrderByNameWithFolderFirstIteratorFactory();
+        }
+        return _instance;
+    }
 };
 
 class OrderByKindIteratorFactory: public IteratorFactory {
+private:
+    static OrderByKindIteratorFactory *_instance;
 public:
     Iterator *create(Folder *folder, int operationCount) override {
         return new Folder::OrderByKindIterator(folder, operationCount);
+    }
+
+    static OrderByKindIteratorFactory *instance() {
+        if (_instance == nullptr) {
+            _instance = new OrderByKindIteratorFactory();
+        }
+        return _instance;
     }
 };
