@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 #include "node.h"
 #include "file.h"
+#include "link.h"
 #include "iterator.h"
 #include "dfs_iterator.h"
 #include "order_by.h"
@@ -212,6 +213,11 @@ private:
             File * file = dynamic_cast<File *>(node);
             if (file) {
                 return new File(node->path());
+            }
+
+            Link * link = dynamic_cast<Link *>(node);
+            if (link) {
+                return new Link(link->path(), link->getTarget());
             }
 
             Node * clonedFolder = new Folder(node->path());
