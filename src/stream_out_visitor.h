@@ -32,6 +32,10 @@ public:
         }
     }
 
+    void visitLink(Link* link) {
+        link->getTarget()->accept(this);
+    }
+
     string getResult() const {
         return _result;
     }

@@ -3,6 +3,7 @@
 #include "file.h"
 #include "folder.h"
 #include "visitor.h"
+#include "link.h"
 
 class FindByNameVisitor : public Visitor {
 public:
@@ -27,6 +28,10 @@ public:
         }
 
         delete it;
+    }
+    
+    void visitLink(Link* link) {
+        link->getTarget()->accept(this);
     }
 
     std::list<string> getPaths() const {
