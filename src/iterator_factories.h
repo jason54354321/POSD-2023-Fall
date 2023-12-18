@@ -11,10 +11,18 @@ public:
 };
 
 class OrderByNameIteratorFactory: public IteratorFactory {
+private:
+    OrderByNameIteratorFactory *_instance;
 public:
     Iterator *create(Folder *folder, int operationCount) override {
         return new Folder::OrderByNameIterator(folder, operationCount);
+    }
 
+    OrderByNameIteratorFactory *instance() {
+        if (_instance == nullptr) {
+            _instance = new OrderByNameIteratorFactory();
+        }
+        return _instance;
     }
 };
 
