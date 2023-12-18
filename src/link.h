@@ -13,7 +13,8 @@ private:
     string _parent;
 
 public:
-    Link(string path): _path(path), Node(path) {
+    Link(string path, Node *node): _path(path), _node(node), Node(path) {
+        system("cat test/ut_iterator.h");
     }
 
     int numberOfFiles() const override {
