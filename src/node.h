@@ -55,6 +55,16 @@ public:
         renameAllChild(old_name, name);
     }
 
+    virtual void renameHook(string new_path) {
+        _path = new_path;
+
+        return;
+    }
+
+    virtual void renameFilePathHook(string new_path) {
+        return;
+    }
+
     virtual void renameAllChild(std::string old_name, std::string name) {
         return;
     }

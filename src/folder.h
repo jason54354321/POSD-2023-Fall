@@ -86,10 +86,10 @@ public:
         for (it->first(); !it->isDone(); it->next()) {
             Node *node = it->currentItem();
 
-            // node->rename(name);
             std::string old_path = node->path();
-            std::string after = node->path().replace(node->path().find(old_name), old_name.size(), name);
-            node->_path = after;
+            std::string new_path = node->path().replace(node->path().find(old_name), old_name.size(), name);
+            // hook operation
+            node->renameHook(new_path);
             cout<< "test:" << node->path() << endl ;
 
             node->renameAllChild(old_name, name);
