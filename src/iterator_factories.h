@@ -25,6 +25,7 @@ public:
         return _instance;
     }
 };
+OrderByNameIteratorFactory* OrderByNameIteratorFactory::_instance = nullptr;
 
 class OrderByNameWithFolderFirstIteratorFactory: public IteratorFactory {
 private:
@@ -42,6 +43,7 @@ public:
         return _instance;
     }
 };
+OrderByNameWithFolderFirstIteratorFactory* OrderByNameWithFolderFirstIteratorFactory::_instance = nullptr;
 
 class OrderByKindIteratorFactory: public IteratorFactory {
 private:
@@ -58,3 +60,4 @@ public:
         return _instance;
     }
 };
+OrderByKindIteratorFactory * OrderByKindIteratorFactory::_instance = nullptr;
