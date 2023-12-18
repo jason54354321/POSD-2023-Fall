@@ -1,6 +1,6 @@
 #pragma once
 
-#include<string>
+#include <string>
 #include "iterator.h"
 #include "visitor.h"
 #include "null_iterator.h"
