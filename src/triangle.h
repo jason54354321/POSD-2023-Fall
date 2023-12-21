@@ -3,6 +3,7 @@
 #include "./visitor.h"
 #include "./iterator_factory.h"
 #include <string>
+#include <sstream>
 
 class Triangle : public Shape {
 public:

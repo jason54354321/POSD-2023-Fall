@@ -5,6 +5,7 @@
 #include <list>
 #include "../src/unit_of_work.h"
 #include "../src/drawing_mapper.h"
+#include "../src/painter_mapper.h"
 #include "../src/drawing.h"
 #include "../src/triangle.h"
 #include "../src/shape.h"
