@@ -1,13 +1,11 @@
 #pragma once
 
-class File;
-class Link;
-class Folder;
+class Triangle;
+class Compound;
 
 class Visitor {
 public:
     virtual ~Visitor() {}
-    virtual void visitFile(File * file) = 0;
-    virtual void visitFolder(Folder * folder) = 0;
-    virtual void visitLink(Link * link) = 0;
+    virtual void visitTriangle(Triangle * triangle) = 0;
+    virtual void visitCompound(Compound * compound) = 0;
 };

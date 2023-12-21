@@ -1,22 +1,41 @@
-.PHONY: clean dirs
+.phony: clean stat
 
-CFLAGS = -g -std=c++11 -Wfatal-errors -Wall 
-LIBS = -lgtest -lpthread
+FLAGS = -std=c++11 -Wfatal-errors -Wall
 
-UT_ALL = test/ut_all.cpp
-TEST_HEADERS = test/ut_iterator.h test/ut_file.h test/ut_folder.h test/ut_node.h test/ut_visitor.h test/ut_tree_visitor.h test/ut_file_system_builder.h \
-	test/ut_link.h
+OBJ = obj/shape_iterator.o obj/unit_of_work.o obj/drawing_mapper.o obj/painter_mapper.o obj/db_mode.o
 
-SRC_HEADERS = src/file.h src/folder.h src/node.h src/iterator.h src/null_iterator.h src/dfs_iterator.h src/visitor.h src/find_by_name_visitor.h src/stream_out_visitor.h src/order_by.h src/tree_visitor.h src/file_system_builder.h src/file_system_parser.h src/file_system_scanner.h \
-	src/link.h
+SRC = src/sqlite_abstract_mapper.h src/builder.h src/compound.h src/domain_object.h src/drawing_mapper.h src/drawing.h src/find_visitor.h src/iterator_factory.h src/painter_mapper.h src/painter.h src/scanner.h src/shape_iterator_factory.h src/shape_iterator.h src/shape_utils.h src/shape.h src/triangle.h src/unit_of_work.h src/visitor.h
 
-all: dirs bin/ut_all
+TEST = test/ut.cpp test/compound_test.h test/db_test.h test/parser_test.h test/iterator_test.h test/parser_test.h test/triangle_test.h test/visitor_test.h
 
-bin/ut_all: $(UT_ALL) $(TEST_HEADERS) $(SRC_HEADERS)
-	g++ $(CFLAGS) -o $@ $<  $(LIBS) 
+all: dir u_test 
 
-clean:
-	rm -rf bin obj
+u_test: clean_db $(SRC) $(TEST) $(OBJ)
+	g++ $(FLAGS) test/ut.cpp $(OBJ) -o bin/ut_all -lsqlite3 -lgtest -lpthread
 
-dirs:
-	mkdir -p bin obj
+obj/shape_iterator.o: src/shape_iterator.h src/shape_iterator.cpp
+	g++ $(FLAGS) -c src/shape_iterator.cpp -o obj/shape_iterator.o
+
+obj/unit_of_work.o: src/unit_of_work.h src/unit_of_work.cpp
+	g++ $(FLAGS) -c src/unit_of_work.cpp -o obj/unit_of_work.o
+
+obj/drawing_mapper.o: src/drawing_mapper.h src/drawing_mapper.cpp src/sqlite_abstract_mapper.h src/parser.h src/builder.h src/scanner.h
+	g++ $(FLAGS) -c src/drawing_mapper.cpp -o obj/drawing_mapper.o
+
+obj/painter_mapper.o: src/painter_mapper.h src/painter_mapper.cpp src/sqlite_abstract_mapper.h src/parser.h src/builder.h src/scanner.h
+	g++ $(FLAGS) -c src/painter_mapper.cpp -o obj/painter_mapper.o
+
+obj/db_mode.o: src/db_mode.h src/db_mode.cpp
+	g++ $(FLAGS) -c src/db_mode.cpp -o obj/db_mode.o
+
+dir:
+	mkdir -p bin obj resource
+
+clean: clean_db
+	rm -f bin/* obj/*.o 
+	
+clean_db:
+	rm -f resource/*.db
+
+stat:
+	wc -l src/* test/*.h test/*.cpp
