@@ -7,6 +7,7 @@
 #include "./iterator_test.h"
 #include "./drawing_test.h"
 #include "./db_test.h"
+#include "./in_memory_test.h"
 
 int main(int argc, char *argv[]) {
     testing::InitGoogleTest(&argc, argv);
